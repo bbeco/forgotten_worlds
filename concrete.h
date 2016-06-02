@@ -11,7 +11,10 @@ private:
 	void computeBoundingBox(void);
 protected:
 	Mesh mesh;
-	virtual void isHit(void) = 0;
+public:	
+	Vec3Df p;
+	Concrete(Vec3Df pos);
+	virtual bool isHit(Concrete & other) = 0;
 };
 
 #endif

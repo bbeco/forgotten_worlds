@@ -9,9 +9,12 @@
 
 unsigned int w_win = 600, h_win = 600;
 
-Enemy enemy;
+Enemy enemies[2] = { Enemy(Vec3Df(-1, 0, 0)), Enemy(Vec3Df(1, 0, 0)) };
 bool drawBoundingBox = true;
-float LightPos[4] = {1,1,0.4,1};
+float LightPos[4] = {0,0,0,1};
+Vec3Df red = Vec3Df(1, 0, 0);
+Vec3Df green = Vec3Df(0, 1, 0);
+Vec3Df blue = Vec3Df(0, 0, 1);
 
 void init()
 {
@@ -37,6 +40,34 @@ void init()
 	glShadeModel(GL_SMOOTH);
 	//mesh.loadMesh("David.obj");
 	glEnable(GL_LIGHTING);
+}
+
+//function to draw coordinate axes with a certain length (1 as a default)
+void drawCoordSystem(float length=1)
+{
+	//draw simply colored axes
+	
+	//remember all states of the GPU
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	//deactivate the lighting state
+	glDisable(GL_LIGHTING);
+	//draw axes
+	glBegin(GL_LINES);
+		glColor3f(1,0,0);
+		glVertex3f(0,0,0);
+		glVertex3f(length,0,0);
+
+		glColor3f(0,1,0);
+		glVertex3f(0,0,0);
+		glVertex3f(0,length,0);
+
+		glColor3f(0,0,1);
+		glVertex3f(0,0,0);
+		glVertex3f(0,0,length);
+	glEnd();
+	
+	//reset to previous state
+	glPopAttrib();
 }
 
 void drawUnitFace(float red, float green, float blue)
@@ -131,30 +162,54 @@ void keyboard(unsigned char key, int x, int y)
 	case 'b':
 		drawBoundingBox = !drawBoundingBox;
 		break;
-	case 'w':
-		LightPos[0] += 0.1;
-		break;
-	case 's':
-		LightPos[0] -= 0.1;
+	case 'd':
+		//LightPos[0] += 0.1;
+		enemies[1].p[0] += 0.1;
 		break;
 	case 'a':
-		LightPos[1] -= 0.1;
+		//LightPos[0] -= 0.1;
+		enemies[1].p[0] -= 0.1;
 		break;
-	case 'd':
-		LightPos[1] += 0.1;
+	case 's':
+		//LightPos[1] -= 0.1;
+		enemies[1].p[1] -= 0.1;
+		break;
+	case 'w':
+		//LightPos[1] += 0.1;
+		enemies[1].p[1] += 0.1;
 		break;
     }
+}
+
+bool isColliding(int k)
+{
+	for (int i = 0; i < 2; i++) {
+		if (enemies[k].isHit(enemies[i]) && k != i) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void display(void)
 {
 	glLightfv(GL_LIGHT0,GL_POSITION,LightPos);
-	drawLight();
-	enemy.draw();
-	if (drawBoundingBox) {
-		enemy.drawBoundingBox();
+	glPushMatrix();
+	glTranslatef(0, 0, -5);
+	drawCoordSystem();
+	//drawLight();
+	for (int i = 0; i < 2; i++) {
+		enemies[i].draw();
+		if (drawBoundingBox) {
+			//std::cout << "drawing BB" << std::endl;
+			if (isColliding(i)) {
+				enemies[i].drawBoundingBox(red);
+			} else {
+				enemies[i].drawBoundingBox(green);
+			}
+		}
 	}
-	//drawUnitCube(1, 1, 1);
+	glPopMatrix();
 }
 
 void displayInternal(void)
@@ -181,7 +236,7 @@ void reshape(int w, int h)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     //glOrtho (-1.1, 1.1, -1.1,1.1, -1000.0, 1000.0);
-    gluPerspective (50, (float)w/h, 1, 10);
+    gluPerspective (50, (float)w/h, 1, 10); //XXX setting the biew space
     glMatrixMode(GL_MODELVIEW);
 }
 

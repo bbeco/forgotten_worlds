@@ -8,10 +8,12 @@ CFLAGS=-g
 
 all: collision_detection
 
-collision_detection: collision_detection.o concrete.o
-	$(CC) $(CFLAGS) -o $@ mesh.o $< $(LDFLAGS)
+collision_detection: collision_detection.o mesh.o concrete.o enemy.h
+	#$(CC) $(CFLAGS) -o $@ $(LDFLAGS)
  
-collision_detection.o: mesh.o mesh.h
+collision_detection.o: mesh.o
+
+mesh.o: concrete.o
 
 clean:
 	rm -fr *.o collision_detection

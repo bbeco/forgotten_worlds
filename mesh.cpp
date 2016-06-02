@@ -32,7 +32,7 @@ void Mesh::computeBoundingBox(void)
 	bbSize = max - min;
 }
 
-void Mesh::drawBoundingBox(void)
+void Mesh::drawBoundingBox(Vec3Df color)
 {
 	//std::cout << "bbOrigin = " << bbOrigin << std::endl << "bbSize = " << bbSize << std::endl;
 	const Vec3Df corners[8] =
@@ -62,7 +62,7 @@ void Mesh::drawBoundingBox(void)
     glLineWidth(1.0f);
     glDisable(GL_LIGHTING);
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	glColor3f(0, 1, 0);
+	glColor3f(color[0], color[1], color[2]);
     glBegin(GL_QUADS);
     for (unsigned short f=0;f<6;++f)
     {

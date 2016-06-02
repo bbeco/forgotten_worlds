@@ -1,4 +1,7 @@
 #include <GL/glut.h>
 #include "concrete.h"
 
-void Concrete::isHit() {};
+Concrete::Concrete(Vec3Df pos = Vec3Df(0,0,0))
+{
+	p = pos;
+};

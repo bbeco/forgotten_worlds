@@ -48,7 +48,7 @@ public:
     void draw();
     void drawSmooth();
     void computeBoundingBox();
-    void drawBoundingBox(void);
+    void drawBoundingBox(Vec3Df color);
 
     //Bounding box information
 	//point of bounding box with minimal coordinates ("lower left corner")
