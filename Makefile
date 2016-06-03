@@ -1,19 +1,20 @@
 #Makefile
 
 CC=g++
-LDFLAGS=-l GL -l GLU -l glut
-CFLAGS=-g
+LDLIBS=-l GL -l GLU -l glut
+CFLAGS=-g -Wall -Werror
 
 .PHONY: clean
 
 all: collision_detection
 
 collision_detection: collision_detection.o mesh.o concrete.o enemy.h
-	#$(CC) $(CFLAGS) -o $@ $(LDFLAGS)
  
-collision_detection.o: mesh.o
+collision_detection.o: mesh.h enemy.h
 
-mesh.o: concrete.o
+mesh.o: rotation.hpp
+
+concrete.o: mesh.h
 
 clean:
 	rm -fr *.o collision_detection

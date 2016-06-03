@@ -12,6 +12,7 @@ unsigned int w_win = 600, h_win = 600;
 Enemy enemies[2] = { Enemy(Vec3Df(-1, 0, 0)), Enemy(Vec3Df(1, 0, 0)) };
 bool drawBoundingBox = true;
 float LightPos[4] = {0,0,0,1};
+float rotation = 0;
 Vec3Df red = Vec3Df(1, 0, 0);
 Vec3Df green = Vec3Df(0, 1, 0);
 Vec3Df blue = Vec3Df(0, 0, 1);
@@ -162,20 +163,21 @@ void keyboard(unsigned char key, int x, int y)
 	case 'b':
 		drawBoundingBox = !drawBoundingBox;
 		break;
+	case 'r': //rotate enemy
+		rotation += 45;
+		enemies[1].zRotate(rotation);
+		break;
+	/* Movements */
 	case 'd':
-		//LightPos[0] += 0.1;
 		enemies[1].p[0] += 0.1;
 		break;
 	case 'a':
-		//LightPos[0] -= 0.1;
 		enemies[1].p[0] -= 0.1;
 		break;
 	case 's':
-		//LightPos[1] -= 0.1;
 		enemies[1].p[1] -= 0.1;
 		break;
 	case 'w':
-		//LightPos[1] += 0.1;
 		enemies[1].p[1] += 0.1;
 		break;
     }
@@ -200,14 +202,7 @@ void display(void)
 	//drawLight();
 	for (int i = 0; i < 2; i++) {
 		enemies[i].draw();
-		if (drawBoundingBox) {
-			//std::cout << "drawing BB" << std::endl;
-			if (isColliding(i)) {
-				enemies[i].drawBoundingBox(red);
-			} else {
-				enemies[i].drawBoundingBox(green);
-			}
-		}
+		enemies[i].drawBoundingBox(green);
 	}
 	glPopMatrix();
 }

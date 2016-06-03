@@ -5,26 +5,34 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 #include <algorithm>
+#include "rotation.hpp"
 
 #ifdef WIN32
 #define sscanf sscanf_s
 #endif
 
-Mesh::Mesh(){}
+Mesh::Mesh()
+{
+	zRotation = 0;
+}
 
 void Mesh::computeBoundingBox(void)
 {
 	Vec3Df min, max;
-	min = max = vertices[0].p;
+	Vec3Df tmp; //temporary vector to store rotated Vertex
+	tmp = vertices[0].p;
+	rotateZ(zRotation, tmp);
+	min = max = tmp;
 	for (int i = 1; i < vertices.size(); i++) {
+		tmp = vertices[i].p;
+		rotateZ(zRotation, tmp);
 		for (int j = 0; j < 3; j++) {
-			if (vertices[i].p[j] < min[j]) {
-				min[j] = vertices[i].p[j];
+			if (tmp[j] < min[j]) {
+				min[j] = tmp[j];
 			}
-			if (vertices[i].p[j] > max[j]) {
-				max[j] = vertices[i].p[j];
+			if (tmp[j] > max[j]) {
+				max[j] = tmp[j];
 			}
 		}
 	}
@@ -73,6 +81,12 @@ void Mesh::drawBoundingBox(Vec3Df color)
     }
     glEnd();
     glPopAttrib();
+}
+
+void Mesh::zRotate(float angle)
+{
+	zRotation = angle;
+	computeBoundingBox();
 }
 
 
@@ -137,6 +151,11 @@ void Mesh::drawSmooth(){
 }
 
 void Mesh::draw(){
+	glPushMatrix();
+	if (zRotation != 0) {
+		//zRotation is expressed with common rotation direction for angles
+		glRotatef(-zRotation, 0, 0, 1);
+	}
     glBegin(GL_TRIANGLES);
 
     for (int i=0;i<triangles.size();++i)
@@ -152,6 +171,7 @@ void Mesh::draw(){
 
     }
     glEnd();
+    glPopMatrix();
 }
 
 

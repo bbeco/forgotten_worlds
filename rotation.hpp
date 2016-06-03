@@ -19,15 +19,15 @@ void rotateZ(float angle, Vec3Df & v)
 	case 0:
 		return;
 	case 90:
-		x = -v[1];
-		y = v[0];
+		x = v[1];
+		y = -v[0];
 		break;
 	case 180:
 		x = -v[0];
 		y = -v[1];
 		break;
 	default:
-		float param = angle*M_PI/180;
+		float param = -angle*M_PI/180;
 		float c, s;
 		c = cos(param);
 		s = sin(param);

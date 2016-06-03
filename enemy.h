@@ -15,13 +15,14 @@ public:
 	Enemy(Vec3Df pos = 0) : Concrete(pos), mesh()
 	{
 		mesh.loadMesh("gargoyle.obj");
+		//mesh.rotate(90, 1, 0, 0);
 		mesh.computeBoundingBox();
 	}
 	void draw()
 	{
 		glPushMatrix();
 		glTranslatef(p[0], p[1], p[2]);
-		glRotatef(90, 1, 0, 0);
+		//glRotatef(90, 1, 0, 0);
 		mesh.draw();
 		glPopMatrix();
 	}
@@ -29,10 +30,14 @@ public:
 	{
 		glPushMatrix();
 		glTranslatef(p[0], p[1], p[2]);
-		glRotatef(90, 1, 0, 0);
+		//glRotatef(90, 1, 0, 0);
 		//std::cout << "enemy p = " << p << std::endl;
 		mesh.drawBoundingBox(color);
 		glPopMatrix();
+	}
+	void zRotate(float angle)
+	{
+		mesh.zRotate(angle);
 	}
 	bool isHit(Concrete & other) { return true; };
 };
