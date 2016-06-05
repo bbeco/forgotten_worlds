@@ -6,10 +6,12 @@
 #include <string.h>
 #include "enemy.h"
 #include "trackball.h"
+#include "util.h"
+
 
 unsigned int w_win = 600, h_win = 600;
 
-Enemy enemies[2] = { Enemy(Vec3Df(-1, 0, 0)), Enemy(Vec3Df(1, 0, 0)) };
+Enemy enemies[2] = { Enemy(Vec3Df(-1, 0, 0)), Enemy(Vec3Df(0, 0, 0)) };
 bool drawBoundingBox = true;
 float LightPos[4] = {0,0,0,1};
 float rotation = 0;
@@ -151,7 +153,7 @@ void keyboard(unsigned char key, int x, int y)
 	switch (key)
     {
 	case 27:     // ESC
-        exit(0);
+        	exit(0);
 	case 'L':
 		//turn lighting on
 		glEnable(GL_LIGHTING);
@@ -162,6 +164,9 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'b':
 		drawBoundingBox = !drawBoundingBox;
+		break;
+	case 'f': //flip enemy
+		enemies[1].flip();
 		break;
 	case 'r': //rotate enemy
 		rotation += 45;
@@ -202,7 +207,12 @@ void display(void)
 	//drawLight();
 	for (int i = 0; i < 2; i++) {
 		enemies[i].draw();
-		enemies[i].drawBoundingBox(green);
+		enemies[i].drawOrigin(Vec3Df(0, 0, 1));
+		if (isColliding(i)) {
+			enemies[i].drawBoundingBox(red);
+		} else {
+			enemies[i].drawBoundingBox(green);
+		}
 	}
 	glPopMatrix();
 }

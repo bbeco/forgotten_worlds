@@ -6,90 +6,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <algorithm>
-#include "rotation.hpp"
 
 #ifdef WIN32
 #define sscanf sscanf_s
 #endif
 
-Mesh::Mesh()
-{
-	zRotation = 0;
-}
-
-void Mesh::computeBoundingBox(void)
-{
-	Vec3Df min, max;
-	Vec3Df tmp; //temporary vector to store rotated Vertex
-	tmp = vertices[0].p;
-	rotateZ(zRotation, tmp);
-	min = max = tmp;
-	for (int i = 1; i < vertices.size(); i++) {
-		tmp = vertices[i].p;
-		rotateZ(zRotation, tmp);
-		for (int j = 0; j < 3; j++) {
-			if (tmp[j] < min[j]) {
-				min[j] = tmp[j];
-			}
-			if (tmp[j] > max[j]) {
-				max[j] = tmp[j];
-			}
-		}
-	}
-	bbOrigin = min;
-	bbSize = max - min;
-}
-
-void Mesh::drawBoundingBox(Vec3Df color)
-{
-	//std::cout << "bbOrigin = " << bbOrigin << std::endl << "bbSize = " << bbSize << std::endl;
-	const Vec3Df corners[8] =
-    {
-        Vec3Df(bbOrigin[0],bbOrigin[1],bbOrigin[2]),
-        Vec3Df(bbOrigin[0] + bbSize[0],bbOrigin[1],bbOrigin[2]),
-        Vec3Df(bbOrigin[0],bbOrigin[1] + bbSize[1],bbOrigin[2]),
-        Vec3Df(bbOrigin[0] + bbSize[0],bbOrigin[1] + bbSize[1],bbOrigin[2]),
-        Vec3Df(bbOrigin[0],bbOrigin[1],bbOrigin[2] + bbSize[2]),
-        Vec3Df(bbOrigin[0] + bbSize[0],bbOrigin[1],bbOrigin[2] + bbSize[2]),
-        Vec3Df(bbOrigin[0],bbOrigin[1] + bbSize[1],bbOrigin[2] + bbSize[2]),
-        Vec3Df(bbOrigin[0] + bbSize[0],bbOrigin[1] + bbSize[1],bbOrigin[2] + bbSize[2])
-    };
-
-
-    static const unsigned short faceCorners[6][4] =
-    {
-        { 0,4,6,2 },
-        { 5,1,3,7 },
-        { 0,1,5,4 },
-        { 3,2,6,7 },
-        { 0,2,3,1 },
-        { 6,4,5,7 }
-    };
-
-	glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glLineWidth(1.0f);
-    glDisable(GL_LIGHTING);
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	glColor3f(color[0], color[1], color[2]);
-    glBegin(GL_QUADS);
-    for (unsigned short f=0;f<6;++f)
-    {
-        const unsigned short* face = faceCorners[f];
-        for(unsigned int v = 0; v<4; v++)
-            glVertex3f(corners[face[v]][0], corners[face[v]][1], corners[face[v]][2]);
-
-    }
-    glEnd();
-    glPopAttrib();
-}
-
-void Mesh::zRotate(float angle)
-{
-	zRotation = angle;
-	computeBoundingBox();
-}
-
-
+Mesh::Mesh() {};
 /************************************************************
  * Normal calculations
  ************************************************************/
@@ -151,11 +73,6 @@ void Mesh::drawSmooth(){
 }
 
 void Mesh::draw(){
-	glPushMatrix();
-	if (zRotation != 0) {
-		//zRotation is expressed with common rotation direction for angles
-		glRotatef(-zRotation, 0, 0, 1);
-	}
     glBegin(GL_TRIANGLES);
 
     for (int i=0;i<triangles.size();++i)
@@ -171,7 +88,6 @@ void Mesh::draw(){
 
     }
     glEnd();
-    glPopMatrix();
 }
 
 

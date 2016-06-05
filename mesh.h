@@ -36,8 +36,7 @@ public:
  * Basic Mesh Class
  ************************************************************/
 class Mesh {
-protected:
-	float zRotation;
+
 public:
     Mesh();
     inline Mesh (const std::vector<Vertex> & v, const std::vector<Triangle> & t) : vertices (v), triangles (t)  {}
@@ -49,12 +48,6 @@ public:
     void centerAndScaleToUnit ();
     void draw();
     void drawSmooth();
-    void computeBoundingBox();
-    void drawBoundingBox(Vec3Df color);
-    void zRotate(float angle);
-    //Bounding box information
-	//point of bounding box with minimal coordinates ("lower left corner")
-    Vec3Df bbOrigin, bbSize;
 };
 
 #endif // MESH_H
