@@ -7,14 +7,16 @@
 class Concrete
 {
 protected:
-	void drawCell(const Vec3Df & Min,const Vec3Df& Max);
-	void computeBoundingBox(void);
 	float zRotation;
 	bool flipped; //true if the mesh has been flipped around y-axe
 	Mesh mesh;
 	//Bounding box information
 	//point of bounding box with minimal coordinates ("lower left corner")
 	Vec3Df bbOrigin, bbSize;
+	
+	void drawCell(const Vec3Df & Min,const Vec3Df& Max);
+	void computeBoundingBox(void);
+	bool checkIfInsideBoundingBox(Vec3Df);
 public:	
 	Vec3Df p; //object position in the scene
 	Concrete(Vec3Df pos);
@@ -24,8 +26,6 @@ public:
 	void drawOrigin(Vec3Df color = Vec3Df(1,0,0));
 	void zRotate(float angle);
 	void flip();
-	
-	bool checkIfInsideBoundingBox(Vec3Df);
 };
 
 #endif

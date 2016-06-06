@@ -158,6 +158,7 @@ void Concrete::drawOrigin(Vec3Df color)
 	glVertex3f(bbOrigin[0], bbOrigin[1], bbOrigin[2]);
 	glEnd();
 	glEnable(GL_LIGHTING);
+	glColor3f(1, 1, 1);
 	glPopMatrix();
 };
 
