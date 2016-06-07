@@ -241,6 +241,7 @@ void reshape(int w, int h)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     //glOrtho (-1.1, 1.1, -1.1,1.1, -1000.0, 1000.0);
+    //gluOrtho2D(-1.0, 1.0, -1.0,1.0);
     gluPerspective (50, (float)w/h, 1, 10); //XXX setting the biew space
     glMatrixMode(GL_MODELVIEW);
 }

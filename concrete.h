@@ -7,7 +7,7 @@
 class Concrete
 {
 protected:
-	float zRotation;
+	float zRotation; //[0; 180]
 	bool flipped; //true if the mesh has been flipped around y-axe
 	Mesh mesh;
 	//Bounding box information
