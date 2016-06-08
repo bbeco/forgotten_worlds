@@ -15,6 +15,7 @@ Concrete::Concrete(Vec3Df pos = Vec3Df(0,0,0))
 {
 	p = pos;
 	zRotation = 0;
+	flipped = false;
 };
 
 void Concrete::computeBoundingBox(void)
@@ -25,7 +26,7 @@ void Concrete::computeBoundingBox(void)
 	tmp[0] = (flipped) ? -tmp[0] : tmp[0];
 	rotateZ(zRotation, tmp);
 	min = max = tmp;
-	for (int i = 1; i < mesh.vertices.size(); i++) {
+	for (unsigned int i = 1; i < mesh.vertices.size(); i++) {
 		tmp = mesh.vertices[i].p;
 		rotateZ(zRotation, tmp);
 		tmp[0] = (flipped) ? -tmp[0] : tmp[0];
@@ -41,6 +42,8 @@ void Concrete::computeBoundingBox(void)
 	bbOrigin = min;
 	bbSize = max - min;
 	
+	p[2] += bbSize[2];
+	
 	//This is setting the starting point for the character correctly
 	//p -= bbOrigin; //XXX probably p should remain constant and the translation before drawing the mesh should be equal to -bbOrigin
 }
@@ -48,6 +51,7 @@ void Concrete::computeBoundingBox(void)
 void Concrete::drawBoundingBox(Vec3Df color)
 {
 	Vec3Df start = p - bbOrigin;
+	start[2] -= bbSize[2];
 	glPushMatrix();
 	glTranslatef(start[0], start[1], start[2]);
 	
@@ -164,9 +168,11 @@ void Concrete::drawOrigin(Vec3Df color)
 
 void Concrete::draw() {
 	Vec3Df start = p - bbOrigin;
+	start[2] -= bbSize[2];
 	glPushMatrix();
 	glTranslatef(start[0], start[1], start[2]);
 	if (flipped) {
+		std::cout << "FLIPPED" << std::endl;
 		glRotatef(180, 0, 1, 0);
 	}
 	if (zRotation != 0) {

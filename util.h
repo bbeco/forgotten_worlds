@@ -4,5 +4,6 @@
 #include <GL/glut.h>
 
 void drawPoint(Vec3Df p, Vec3Df color = Vec3Df(1, 0, 0));
+void drawCoordSystem(float length=1);
 
 #endif //_UTIL_HPP_

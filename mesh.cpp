@@ -61,7 +61,7 @@ void Mesh::drawSmooth(){
 
     glBegin(GL_TRIANGLES);
 
-    for (int i=0;i<triangles.size();++i)
+    for (unsigned int i=0;i<triangles.size();++i)
     {
         for(int v = 0; v < 3 ; v++){
             glNormal3f(vertices[triangles[i].v[v]].n[0], vertices[triangles[i].v[v]].n[1], vertices[triangles[i].v[v]].n[2]);
@@ -75,7 +75,7 @@ void Mesh::drawSmooth(){
 void Mesh::draw(){
     glBegin(GL_TRIANGLES);
 
-    for (int i=0;i<triangles.size();++i)
+    for (unsigned int i=0;i<triangles.size();++i)
     {
         Vec3Df edge01 = vertices[triangles[i].v[1]].p -  vertices[triangles[i].v[0]].p;
         Vec3Df edge02 = vertices[triangles[i].v[2]].p -  vertices[triangles[i].v[0]].p;
@@ -220,6 +220,17 @@ bool Mesh::loadMesh(const char * filename)
     computeVertexNormals();
     return true;
 }
+
+/*
+ * Scale the mesh
+ */
+void Mesh::scale(float scale)
+{
+	for (unsigned int i = 0; i < vertices.size(); i += 1)
+	{
+		vertices[i].p *= scale;
+	}
+};
 
 #ifdef WIN32
 #undef sscanf 

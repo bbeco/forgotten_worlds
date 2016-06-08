@@ -48,6 +48,7 @@ public:
     void centerAndScaleToUnit ();
     void draw();
     void drawSmooth();
+    void scale(float scaling);
 };
 
 #endif // MESH_H

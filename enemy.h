@@ -9,10 +9,10 @@
 class Enemy: public Concrete
 {
 public:
-	Enemy(Vec3Df pos = 0) : Concrete(pos)
+	Enemy(Vec3Df pos = Vec3Df(0,0,0)) : Concrete(pos)
 	{
 		mesh.loadMesh("gargoyle.obj");
-		//mesh.rotate(90, 1, 0, 0);
+		mesh.scale(0.5);
 		computeBoundingBox();
 	};
 	void zRotate(float angle)
