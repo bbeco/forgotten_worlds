@@ -29,6 +29,10 @@ Game::Game()
 	blue = Vec3Df(0, 0, 1);
 	enemies.push_back(Enemy(Vec3Df(0, 0, -3)));
 	enemies.push_back(Enemy(Vec3Df(1, 0, -3)));
+	hero = Hero(Vec3Df(1, 1, -3));
+	activateBoss = false;
+	drawArm = false;
+	boss = Boss(Vec3Df(4, 0, -3));
 };
 
 void Game::init() {};
@@ -44,12 +48,62 @@ void Game::display(void)
 	glTranslatef(screenOrigin[0], screenOrigin[1], screenOrigin[2]);
 	glLightfv(GL_LIGHT0,GL_POSITION,LightPos);
 	drawLight();
-	//drawCoordSystem();
-	drawPoint(Vec3Df(0.1, 0.1, -0.1));
+	
+	//Collision detection
+	vector<Bullet>::iterator ib = bullets.begin();
+	vector<Enemy>::iterator ie = enemies.begin();
+	while (ib != bullets.end()) {
+		ie = enemies.begin();
+		while ( ie != enemies.end()) {
+			if (ib->isHit(*ie)) {
+				bullets.erase(ib);
+				ie = enemies.erase(ie);
+				break;
+			} else {
+				//ib++;
+				ie++;
+			}
+		}
+		ib++;
+	}
+	ie = enemies.begin();
+	while (ie != enemies.end()) {
+		if (hero.isHit(*ie)) {
+			hero.drawBoundingBox(red);
+			ie = enemies.erase(ie);
+		} else {
+			ie++;
+			hero.drawBoundingBox();
+		}
+	}
 	for (unsigned int i = 0; i < enemies.size(); i++) {
 		enemies[i].draw();
-		//enemies[i].drawOrigin(Vec3Df(0, 0, 1));
-		enemies[i].drawBoundingBox(green);
+		enemies[i].drawBoundingBox();
 	}
+	hero.draw();
+	for(unsigned int i=0;i<bullets.size();i++) {
+		bullets[i].draw();
+	}
+	
+	if (activateBoss) {
+		boss.draw();
+		if (boss.isHit(hero)) {
+			boss.drawBoundingBox(red);
+		} else {
+			boss.drawBoundingBox();
+		}
+		if (drawArm) {
+			boss.draw_boss_hands();
+			for (int i = 0; i < boss.boss_hand_size*boss.boss_hand_num; i += 1)
+			{
+				if (boss.hands[i]->isHit(hero)) {
+					boss.hands[i]->drawBoundingBox(red);
+				} else {
+					boss.hands[i]->drawBoundingBox();
+				}
+			}
+		}
+	}
+	
 	glPopMatrix();
 };

@@ -7,7 +7,7 @@
 #include "trackball.h"
 #include "game.h"
 #include "loadppm.h"
-
+using namespace std;
 
 unsigned int w_win = 640, h_win = 480;
 Game game;
@@ -220,14 +220,6 @@ void keyboard(unsigned char key, int x, int y)
     {
 	case 27:     // ESC
         	exit(0);
-	case 'L':
-		//turn lighting on
-		glEnable(GL_LIGHTING);
-		break;
-	case 'l':
-		//turn lighting off
-		glDisable(GL_LIGHTING);
-		break;
 	case 'b':
 		drawBoundingBox = !drawBoundingBox;
 		break;
@@ -240,17 +232,18 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	/* Movements */
 	case 'd':
-		//enemies[1].p[0] += 0.1;
+		game.hero.p[0] += 0.1;
 		break;
 	case 'a':
-		//enemies[1].p[0] -= 0.1;
+		game.hero.p[0] -= 0.1;
 		break;
 	case 's':
-		//enemies[1].p[1] -= 0.1;
+		game.hero.p[1] -= 0.1;
 		break;
 	case 'w':
-		//enemies[1].p[1] += 0.1;
+		game.hero.p[1] += 0.1;
 		break;
+		
     }
 }
 
@@ -270,18 +263,6 @@ void setOrigin()
 	origin = Vec3Df((float)objX, (float)objY, (float)objZ);
 	cout << "origin = " << origin << endl;
 }
-
-//void drawAbsoluteCoord()
-//{
-//	
-//	setOrigin();
-//	glPushMatrix();
-//	//glTranslated(objX, objY, objZ);
-//	drawCoordSystem();
-//	glPopMatrix();
-//}
-
-
 
 void display() {
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -331,10 +312,26 @@ void reshape(int w, int h)
 
 void animate()
 {
+	game.bullets.push_back(game.hero.shoot());
+	vector<Bullet>::iterator it;
+	for (it = game.bullets.begin(); it->p[0] > 3.5; it++);
+	game.bullets.erase(game.bullets.begin(), it);
+	for (vector<Bullet>::iterator it = game.bullets.begin(); it != game.bullets.end(); it++) {
+		it->update();
+	}
 	if(x_move <= 50){
-		x_move += 0.01;
-	} else{
-		//drawBoss = true;
+		x_move += 0.04;
+		
+		if (x_move >= 50) {
+			game.activateBoss = true;
+		}
+	} else {
+		if (game.boss.p[0] >= 2) {
+			game.boss.p[0] -= 0.3;
+		} else {
+			game.boss.create_boss_hands();
+			game.drawArm = true;
+		}
 	}
 }
 

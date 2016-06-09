@@ -4,6 +4,8 @@
 #include "enemy.h"
 #include "hero.h"
 #include "util.h"
+#include "boss.h"
+#include "bullet.h"
 
 using namespace std;
 
@@ -12,7 +14,6 @@ class Game
 private:
 	Vec3Df screenOrigin;
 	vector<Enemy> enemies;
-	Hero hero;
 	
 	float LightPos[4];
 	Vec3Df red;
@@ -21,6 +22,12 @@ private:
 	
 	void drawLight();
 public:
+	vector<Bullet> bullets;
+	Boss boss;
+	Hero hero;
+	bool activateBoss;
+	bool drawArm;
+	
 	Game();
 	void setScreenOrigin(Vec3Df o);
 	void init();

@@ -2,6 +2,7 @@
 
 void drawPoint(Vec3Df p, Vec3Df color)
 {
+	glPushMatrix();
 	glDisable(GL_LIGHTING);
 	glPointSize(40);
 	glColor3f(color[0], color[1], color[2]);	
@@ -10,6 +11,7 @@ void drawPoint(Vec3Df p, Vec3Df color)
 	glEnd();
 	glEnable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
+	glPopMatrix();
 }
 
 //function to draw coordinate axes with a certain length (1 as a default)

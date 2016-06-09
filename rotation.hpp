@@ -14,20 +14,19 @@
 void rotateZ(float angle, Vec3Df & v)
 {
 	float x, y;
-	int int_angle = (int)angle;
-	switch (int_angle) {
-	case 0:
+	if (angle == 0) {
 		return;
-	case 90:
+	} else if (angle == 90) {
+		x = -v[1];
+		y = v[0];
+	} else if (angle == -90) {
 		x = v[1];
 		y = -v[0];
-		break;
-	case 180:
+	} else if (angle == 180 || angle == -180) {
 		x = -v[0];
 		y = -v[1];
-		break;
-	default:
-		float param = -angle*M_PI/180;
+	} else {	
+		float param = angle*M_PI/180;
 		float c, s;
 		c = cos(param);
 		s = sin(param);
