@@ -51,20 +51,25 @@ void Game::display(void)
 	
 	//Collision detection
 	vector<Bullet>::iterator ib = bullets.begin();
-	vector<Enemy>::iterator ie = enemies.begin();
-	while (ib != bullets.end()) {
+	vector<Enemy>::iterator ie;
+	bool hit = false;
+	while (ib != bullets.end() && !enemies.empty()) {
 		ie = enemies.begin();
 		while ( ie != enemies.end()) {
 			if (ib->isHit(*ie)) {
-				bullets.erase(ib);
-				ie = enemies.erase(ie);
+				hit = true;
+				ib = bullets.erase(ib);
+				enemies.erase(ie);
 				break;
 			} else {
-				//ib++;
 				ie++;
 			}
 		}
-		ib++;
+		if (!hit) {
+			ib++;
+		} else {
+			hit = false;
+		}
 	}
 	ie = enemies.begin();
 	while (ie != enemies.end()) {
