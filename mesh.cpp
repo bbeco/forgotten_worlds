@@ -4,13 +4,11 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <algorithm>
-
 #ifdef WIN32
 #define sscanf sscanf_s
 #endif
-
+using namespace std;
 Mesh::Mesh() {};
 /************************************************************
  * Normal calculations
@@ -229,8 +227,75 @@ void Mesh::scale(float scale)
 	for (unsigned int i = 0; i < vertices.size(); i += 1)
 	{
 		vertices[i].p *= scale;
+	}	
+}
+void Mesh::computeBoundingCube () {
+    Vec3Df minPoint, maxPoint;
+	minPoint=maxPoint=vertices[0].p;	
+    for  (unsigned int i = 1; i < vertices.size (); i++)
+    {
+		for (int j=0;j<3;++j)
+		{
+			minPoint[j] = minPoint[j]< (vertices[i].p)[j] ? minPoint[j]:(vertices[i].p)[j];
+			maxPoint[j] = maxPoint[j]> (vertices[i].p)[j] ? maxPoint[j]:(vertices[i].p)[j];
+		}
 	}
-};
+	
+	//set boundind box origin to minimum corner
+	bbOriginSimplify=minPoint;
+	
+	//compute extent of the mesh
+	maxPoint-=minPoint;
+	bbEdgeSize=max(max(maxPoint[0],maxPoint[1]),maxPoint[2]);
+	
+}
+Mesh Mesh::simplifyMesh(unsigned int r)
+{
+	const vector<Vertex> & vertices = this->vertices;
+    const vector<Triangle> & triangles = this->triangles;
+	vector<Triangle> simplifiedTriangles;
+	vector<Vertex> simplifiedVertices;
+	std::map<unsigned int, unsigned int > newIndexRemapping;
+	Mesh simplified;
+	computeBoundingCube();
+	Vec3Df tmp = Vec3Df(0.01f, 0.01f, 0.01f);
+	grid = Grid(bbOriginSimplify - tmp, bbEdgeSize + 2*0.01, r );
+	grid.putVertices(vertices);
+	grid.computeRepresentatives();
+	
+	int count = 0;
+    for(RepresentativeList::iterator it = grid.representatives.begin() ; it != grid.representatives.end (); it++, count++){
+        newIndexRemapping[(*it).first] = count;
+        simplifiedVertices.push_back((*it).second);
+    }
+
+	for(unsigned int i = 0; i < triangles.size(); i++){
+		Vec3Df a, b, c;
+		a = vertices[triangles[i].v[0]].p;
+		b = vertices[triangles[i].v[1]].p;
+		c = vertices[triangles[i].v[2]].p;
+		
+		int ind1, ind2, ind3;
+		ind1 = grid.isContainedAt(a);
+		ind2 = grid.isContainedAt(b);
+		ind3 = grid.isContainedAt(c);
+		
+		if (ind1 != ind2 && ind2 != ind3 && ind1 != ind3) {
+			unsigned int newIndeces[3];
+		
+			newIndeces[0] = newIndexRemapping[ind1];
+			newIndeces[1] = newIndexRemapping[ind2];
+			newIndeces[2] = newIndexRemapping[ind3];
+			
+			simplifiedTriangles.push_back(Triangle(newIndeces[0], newIndeces[1], newIndeces[2]));
+		}
+		
+	}
+	simplified = Mesh(simplifiedVertices , simplifiedTriangles);
+	simplified.computeVertexNormals();
+	return simplified;
+}
+
 
 #ifdef WIN32
 #undef sscanf 

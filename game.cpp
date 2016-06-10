@@ -33,6 +33,7 @@ Game::Game()
 	activateBoss = false;
 	drawArm = false;
 	boss = Boss(Vec3Df(4, 0, -3));
+	bossLife = 10;
 };
 
 void Game::init() {};
@@ -93,9 +94,10 @@ void Game::display(void)
 	if (activateBoss) {
 		boss.draw();
 		if (boss.isHit(hero)) {
-			boss.drawBoundingBox(red);
-		} else {
-			boss.drawBoundingBox();
+			if (bossLife > 0) {
+				bossLife--;
+			}
+			boss.assignMesh(bossLife);
 		}
 		if (drawArm) {
 			boss.draw_boss_hands();

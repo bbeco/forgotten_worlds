@@ -8,11 +8,12 @@
 #include "util.h"
 #include "bullet.h"
 
+
 class Hand_Boss: public Concrete
 {
 protected:
 	float boss_hand_radius;
-	int boss_hand_stacks; 
+	int boss_hand_stacks;
 public: 
 	Hand_Boss (Vec3Df pos): Concrete(pos)
 	{
@@ -39,6 +40,7 @@ public:
 		Bullet b(p,0);
 		return b;
 	}
+	
 };
 
 class Boss: public Concrete
@@ -57,6 +59,7 @@ public:
 	int boss_hand_size;
 	int boss_hand_num;
 	Hand_Boss** hands;
+	Mesh simplifiedMesh[10];
 	
 	Boss(Vec3Df pos = Vec3Df(0,0,0)) : Concrete(pos)
 	{
@@ -73,6 +76,9 @@ public:
 		count_up = true;
 		boss_hand_radius = 0.1;
 		hands = new Hand_Boss*[boss_hand_num*boss_hand_size];
+		for(unsigned int i = 0;i < 10;i++){
+			simplifiedMesh[i] = mesh.simplifyMesh(i*2);
+		}
 	}
 	void create_boss_hands() {
         for (int i = 0;i < boss_hand_num*boss_hand_size; i++){
@@ -89,6 +95,10 @@ public:
 			hands[i]->draw();
 		}
 		glColor3f(1,1,1);
+	}
+	void assignMesh(unsigned int life)
+	{	
+		mesh = simplifiedMesh[life];
 	}
 //	void update_boss_hand_pos() {
 //		for (int i = 0; i < boss_hand_num*boss_hand_size; i++) {

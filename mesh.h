@@ -3,6 +3,7 @@
 
 #include "Vertex.h"
 #include <vector>
+#include "grid.h"
 
 /************************************************************
  * Triangle Class
@@ -41,14 +42,21 @@ public:
     Mesh();
     inline Mesh (const std::vector<Vertex> & v, const std::vector<Triangle> & t) : vertices (v), triangles (t)  {}
     std::vector<Vertex> vertices;
-    std::vector<Triangle> triangles;
-
+    std::vector<Triangle> triangles;	
+	//point of bounding box with minimal coordinates ("lower left corner")
+    Vec3Df bbOriginSimplify;
+	//extent of the bounding box (for simplicity, assumed to be the same along each axis)
+    float bbEdgeSize;
+    Grid grid;
     bool loadMesh(const char * filename);
     void computeVertexNormals ();
     void centerAndScaleToUnit ();
+    void computeBoundingCube();
     void draw();
     void drawSmooth();
     void scale(float scaling);
+    Mesh simplifyMesh(unsigned int r);
+    
 };
 
 #endif // MESH_H

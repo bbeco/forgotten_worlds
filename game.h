@@ -19,7 +19,7 @@ private:
 	Vec3Df red;
 	Vec3Df green;
 	Vec3Df blue;
-	
+	unsigned int bossLife;
 	void drawLight();
 public:
 	vector<Bullet> bullets;
