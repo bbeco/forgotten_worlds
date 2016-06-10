@@ -7,11 +7,11 @@ Vec3Df computeSpeed(float zRotation){
 	case 0:
 		return Vec3Df(0.4,0,0);
 	case 90:
-		return Vec3Df(0,-0.4,0);
-	case -90:
 		return Vec3Df(0,0.4,0);
+	case -90:
+		return Vec3Df(0,-0.4,0);
 	default:
-		float param = -zRotation*M_PI/180;
+		float param = zRotation*M_PI/180;
 		float c, s;
 		c = cos(param);
 		s = sin(param);

@@ -320,13 +320,13 @@ void reshape(int w, int h)
 int count = 0;
 void animate()
 {	
-//	count++;
-//	count = count%2;
-//	if(count == 1){
+	count++;
+	count = count%2;
+	if(count == 1){
 		game.bullets.push_back(game.hero.shoot());
-//	}
+	}
 	vector<Bullet>::iterator it;
-	for (it = game.bullets.begin(); it->p[0] > 3.5; it++);
+	for (it = game.bullets.begin(); (it->p[0] > 3.5) || (it->p[0] < -3.5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
 	game.bullets.erase(game.bullets.begin(), it);
 	//bool tmp =true;
 	for (vector<Bullet>::iterator it = game.bullets.begin(); it != game.bullets.end(); it++) {
