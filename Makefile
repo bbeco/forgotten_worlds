@@ -39,4 +39,4 @@ util.o: util.h
 bullet.o: bullet.h
 
 clean:
-	rm -fr *.o forgotten
+	rm -fr *.o forgotten collision_detection rotation_test
