@@ -28,7 +28,7 @@ std::vector<float> SurfaceColors3f;
 std::vector<float> SurfaceTexCoords2f;
 //triangle indices (three successive entries: n1, n2, n3 represent a triangle, each n* is an index representing a vertex.)
 std::vector<unsigned int> SurfaceTriangles3ui;
-
+float theta = 0;
 void initTexture()
 {
 	Texture.resize(3);
@@ -243,6 +243,14 @@ void keyboard(unsigned char key, int x, int y)
 	case 'w':
 		game.hero.p[1] += 0.1;
 		break;
+	case 'j':
+		theta += 22.5;
+		game.hero.zRotate(theta);
+		break;
+	case 'k':
+		theta -= 22.5;
+		game.hero.zRotate(theta); 
+		break;
 		
     }
 }
@@ -309,13 +317,18 @@ void reshape(int w, int h)
     gluPerspective (50, (float)w/h, 1, 15); //XXX setting the biew space
     glMatrixMode(GL_MODELVIEW);
 }
-
+int count = 0;
 void animate()
-{
-	game.bullets.push_back(game.hero.shoot());
+{	
+//	count++;
+//	count = count%2;
+//	if(count == 1){
+		game.bullets.push_back(game.hero.shoot());
+//	}
 	vector<Bullet>::iterator it;
 	for (it = game.bullets.begin(); it->p[0] > 3.5; it++);
 	game.bullets.erase(game.bullets.begin(), it);
+	//bool tmp =true;
 	for (vector<Bullet>::iterator it = game.bullets.begin(); it != game.bullets.end(); it++) {
 		it->update();
 	}

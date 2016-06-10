@@ -11,8 +11,10 @@ class Bullet: public Concrete
 protected:
 	float size;
 	Vec3Df speed;
+	GLuint text[2];
 public:
-	Bullet (Vec3Df pos = Vec3Df(0,0,0),Vec3Df speed = Vec3Df(0,0,0));
+	bool mytext;
+	Bullet (Vec3Df pos = Vec3Df(0,0,0),float theta = 0);
 	void computeBoundingBox();
 	void draw();
 	void update();

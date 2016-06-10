@@ -16,13 +16,13 @@ protected:
 public: 
 	Hand_Boss (Vec3Df pos): Concrete(pos)
 	{
-		boss_hand_radius = 0.05;
+		boss_hand_radius = 0.1;
 		boss_hand_stacks = 50;
 		computeBoundingBox();
 	}
 	void computeBoundingBox()
 	{
-		bbOrigin = Vec3Df(-0.05, -0.05, -0.05);
+		bbOrigin = Vec3Df(-0.1, -0.1, -0.1);
 		bbSize = Vec3Df(2*boss_hand_radius,2*boss_hand_radius,2*boss_hand_radius);
 	}
 	void draw()
@@ -36,7 +36,7 @@ public:
 	
 	Bullet shoot()
 	{
-		Bullet b(p, Vec3Df(-1, 0, 0));
+		Bullet b(p,0);
 		return b;
 	}
 };
@@ -62,7 +62,7 @@ public:
 	{
 		mesh.loadMesh("gargoyle.obj");
 		computeBoundingBox();
-		boss_hand_size = 20;
+		boss_hand_size = 10;
 		boss_hand_num = 2;
 		PI = 3.14;
 		boss_hand_stacks = 50;
@@ -71,7 +71,7 @@ public:
 		boss_hand_count_max = 2000; 
 		boss_hand_count_step = 10;
 		count_up = true;
-		boss_hand_radius = 0.05;
+		boss_hand_radius = 0.1;
 		hands = new Hand_Boss*[boss_hand_num*boss_hand_size];
 	}
 	void create_boss_hands() {
