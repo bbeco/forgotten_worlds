@@ -19,7 +19,7 @@ float LightPos[4] = {0, 0, 0, 1};
 bool drawBoundingBox = true;
 int NbVertX=60, NbVertY=40;
 float x_move = 12;
-float minValidPosition[2] = {-1.3, -0.7}, maxValidPosition[2] = {3, 1.9};
+float minValidPosition[2] = {-1.3, -0.7}, maxValidPosition[2] = {3, 1.7};
 std::vector<GLuint> Texture;
 //vertices
 std::vector<float> SurfaceVertices3f;
