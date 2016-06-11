@@ -2,7 +2,7 @@
 
 Enemy::Enemy(Vec3Df pos, Vec3Df hp) : Concrete(pos)
 {
-	mesh.loadMesh("gargoyle.obj");
+	mesh.loadMesh("ufo.obj");
 	mesh.scale(0.5);
 	float initial_orientation = compute_orientation(hp);
 	if (initial_orientation > 90 || initial_orientation < -90) {

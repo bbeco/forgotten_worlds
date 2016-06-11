@@ -2,7 +2,7 @@
 
 Hero::Hero(Vec3Df pos) : Concrete(pos)
 {
-	mesh.loadMesh("Guard.obj");
+	mesh.loadMesh("guard.obj");
 	mesh.scale(0.5);
 	computeBoundingBox();
 	zRotation = 0;
