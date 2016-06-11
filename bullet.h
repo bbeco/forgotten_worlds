@@ -12,9 +12,10 @@ protected:
 	float size;
 	Vec3Df speed;
 	GLuint text[2];
+	Vec3Df col;
 public:
 	bool mytext;
-	Bullet (Vec3Df pos = Vec3Df(0,0,0),float theta = 0);
+	Bullet (Vec3Df pos = Vec3Df(0,0,0),float theta = 0,Vec3Df col = Vec3Df(1,1,0));
 	void computeBoundingBox();
 	void draw();
 	void update();

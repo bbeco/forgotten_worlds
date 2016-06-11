@@ -319,6 +319,7 @@ void reshape(int w, int h)
 }
 int count = 0;
 int sign = 1;
+bool text = true;
 void animate()
 {	
 	count++;
@@ -330,6 +331,8 @@ void animate()
 	for (it = game.bullets.begin(); (it->p[0] > 3.5) || (it->p[0] < -3.5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
 	game.bullets.erase(game.bullets.begin(), it);
 	for (vector<Bullet>::iterator it = game.bullets.begin(); it != game.bullets.end(); it++) {
+		it->mytext = text;
+		text = !text;
 		it->update();
 	}
 	if(x_move <= 50){
