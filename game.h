@@ -13,7 +13,6 @@ class Game
 {
 private:
 	Vec3Df screenOrigin;
-	vector<Enemy> enemies;
 	
 	float LightPos[4];
 	Vec3Df red;
@@ -22,6 +21,7 @@ private:
 	unsigned int bossLife;
 	void drawLight();
 public:
+	vector<Enemy> enemies;
 	vector<Bullet> bullets;
 	Boss boss;
 	Hero hero;

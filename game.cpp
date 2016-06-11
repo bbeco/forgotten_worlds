@@ -50,7 +50,9 @@ void Game::display(void)
 	glLightfv(GL_LIGHT0,GL_POSITION,LightPos);
 	drawLight();
 	
-	//Collision detection
+	/*
+	 * Collision detection
+	 */
 	//hero bullets and enemies
 	vector<Bullet>::iterator ib = bullets.begin();
 	vector<Enemy>::iterator ie;
@@ -84,6 +86,10 @@ void Game::display(void)
 			hero.drawBoundingBox();
 		}
 	}
+	
+	/*
+	 * Drawing sceene
+	 */
 	for (unsigned int i = 0; i < enemies.size(); i++) {
 		enemies[i].draw();
 		enemies[i].drawBoundingBox();

@@ -10,6 +10,7 @@
 using namespace std;
 
 unsigned int w_win = 640, h_win = 480;
+float angle = 0;
 Game game;
 Vec3Df origin;
 float LightPos[4] = {0, 0, 0, 1};
@@ -220,6 +221,11 @@ void keyboard(unsigned char key, int x, int y)
     {
 	case 27:     // ESC
         	exit(0);
+        case 'r':
+		angle += 22.5;
+		if (angle > 180) angle = angle - 360;
+		game.enemies[1].zRotate(angle);
+		break;
 	/* Movements */
 	case 'd':
 		if (game.hero.p[0] + 0.1 < maxValidPosition[0]) {
@@ -333,7 +339,12 @@ void animate()
 	vector<Bullet>::iterator it;
 	for (it = game.bullets.begin(); (it->p[0] > 3.5) || (it->p[0] < -3.5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
 	game.bullets.erase(game.bullets.begin(), it);
-	//bool tmp =true;
+	
+	//updating enemy position and orientation
+	for (unsigned int i = 0; i < game.enemies.size(); i++) {
+		game.enemies[i].update(game.hero.p);
+	}
+	
 	for (vector<Bullet>::iterator it = game.bullets.begin(); it != game.bullets.end(); it++) {
 		it->update();
 	}
@@ -350,6 +361,14 @@ void animate()
 			game.boss.create_boss_hands();
 			game.drawArm = true;
 		}
+	}
+	
+	/*
+	 * Updating enemies position
+	 */
+	for (unsigned int i = 0; i < game.enemies.size(); i += 1)
+	{
+		//game.enemies[i].update(game.hero.p);
 	}
 }
 
