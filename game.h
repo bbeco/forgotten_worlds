@@ -21,12 +21,13 @@ private:
 	unsigned int bossLife;
 	void drawLight();
 public:
-	vector<Enemy> enemies;
+	vector<Enemy*> enemies;
 	vector<Bullet> bullets;
 	Boss boss;
 	Hero hero;
 	bool activateBoss;
 	bool drawArm;
+	int numberOfEnemies;
 	
 	Game();
 	void setScreenOrigin(Vec3Df o);

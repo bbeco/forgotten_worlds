@@ -1,9 +1,14 @@
 #include "enemy.h"
 
-Enemy::Enemy(Vec3Df pos) : Concrete(pos)
+Enemy::Enemy(Vec3Df pos, Vec3Df hp) : Concrete(pos)
 {
 	mesh.loadMesh("gargoyle.obj");
 	mesh.scale(0.5);
+	float initial_orientation = compute_orientation(hp);
+	if (initial_orientation > 90 || initial_orientation < -90) {
+		flipped = true;
+	}
+	zRotation = initial_orientation;
 	computeBoundingBox();
 };
 
@@ -39,7 +44,8 @@ void Enemy::update(Vec3Df hp)
 	Vec3Df update = enemy_direction(hp);
 	p += update;
 	//...and orientation
-	zRotate(compute_orientation(hp));
+	float computed_orientation = compute_orientation(hp);
+	zRotate(computed_orientation);
 };
 
 /*Bullet Enemy::shoot()

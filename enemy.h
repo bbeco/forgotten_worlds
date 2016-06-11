@@ -19,7 +19,7 @@ protected:
 	float compute_orientation(Vec3Df hp);
 	
 public:
-	Enemy(Vec3Df pos = Vec3Df(0,0,0));
+	Enemy(Vec3Df pos, Vec3Df hp);
 	void update(Vec3Df hp);
 	//Bullet shoot();
 };

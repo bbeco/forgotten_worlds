@@ -27,13 +27,14 @@ Game::Game()
 	red = Vec3Df(1, 0, 0);
 	green = Vec3Df(0, 1, 0);
 	blue = Vec3Df(0, 0, 1);
-	enemies.push_back(Enemy(Vec3Df(0, 0, -3)));
-	enemies.push_back(Enemy(Vec3Df(1, 0, -3)));
-	hero = Hero(Vec3Df(1, 1, -3));
+//	enemies.push_back(Enemy(Vec3Df(2, 0, -3)));
+//	enemies.push_back(Enemy(Vec3Df(-2, 0, -3)));
+	hero = Hero(Vec3Df(-1, 1, -3));
 	activateBoss = false;
 	drawArm = false;
 	boss = Boss(Vec3Df(4, 0, -3));
 	bossLife = 10;
+	numberOfEnemies = 0;
 };
 
 void Game::init() {};
@@ -55,15 +56,18 @@ void Game::display(void)
 	 */
 	//hero bullets and enemies
 	vector<Bullet>::iterator ib = bullets.begin();
-	vector<Enemy>::iterator ie;
+	vector<Enemy*>::iterator ie;
 	bool hit = false;
 	while (ib != bullets.end() && !enemies.empty()) {
 		ie = enemies.begin();
 		while ( ie != enemies.end()) {
-			if (ib->isHit(*ie)) {
+			if (ib->isHit(**ie)) {
 				hit = true;
 				ib = bullets.erase(ib);
+				//enemies are dynamically allocated!
+				delete(*ie);
 				enemies.erase(ie);
+				numberOfEnemies--;
 				break;
 			} else {
 				ie++;
@@ -78,9 +82,11 @@ void Game::display(void)
 	//hero and enemies
 	ie = enemies.begin();
 	while (ie != enemies.end()) {
-		if (hero.isHit(*ie)) {
+		if (hero.isHit(**ie)) {
 			hero.drawBoundingBox(red);
+			delete(*ie);
 			ie = enemies.erase(ie);
+			numberOfEnemies--;
 		} else {
 			ie++;
 			hero.drawBoundingBox();
@@ -88,11 +94,11 @@ void Game::display(void)
 	}
 	
 	/*
-	 * Drawing sceene
+	 * Drawing scene
 	 */
 	for (unsigned int i = 0; i < enemies.size(); i++) {
-		enemies[i].draw();
-		enemies[i].drawBoundingBox();
+		enemies[i]->draw();
+		enemies[i]->drawBoundingBox();
 	}
 	hero.draw();
 	for(unsigned int i=0;i<bullets.size();i++) {

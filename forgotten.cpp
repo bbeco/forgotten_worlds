@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include <cstdlib>
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
@@ -7,10 +8,11 @@
 #include "trackball.h"
 #include "game.h"
 #include "loadppm.h"
+#define MAX_ENEMY_NUMBER 10
 using namespace std;
 
 unsigned int w_win = 640, h_win = 480;
-float angle = 0;
+float enemyAppearenceFrequency = 3;
 Game game;
 Vec3Df origin;
 float LightPos[4] = {0, 0, 0, 1};
@@ -221,11 +223,6 @@ void keyboard(unsigned char key, int x, int y)
     {
 	case 27:     // ESC
         	exit(0);
-        case 'r':
-		angle += 22.5;
-		if (angle > 180) angle = angle - 360;
-		game.enemies[1].zRotate(angle);
-		break;
 	/* Movements */
 	case 'd':
 		if (game.hero.p[0] + 0.1 < maxValidPosition[0]) {
@@ -342,13 +339,31 @@ void animate()
 	
 	//updating enemy position and orientation
 	for (unsigned int i = 0; i < game.enemies.size(); i++) {
-		game.enemies[i].update(game.hero.p);
+		game.enemies[i]->update(game.hero.p);
 	}
 	
 	for (vector<Bullet>::iterator it = game.bullets.begin(); it != game.bullets.end(); it++) {
 		it->update();
 	}
 	if(x_move <= 50){
+		/*
+		 * Creating an enemy
+		 */
+		if (game.numberOfEnemies < MAX_ENEMY_NUMBER) {
+			//srand();
+			//a random value in the range 1 to 100
+			int randomValue = (int)(rand() % 100 + 1);
+			//randomValue = 100;
+			if (randomValue <= enemyAppearenceFrequency) {
+				float rnd = (((float)rand())/RAND_MAX);
+				Vec3Df tmp_enemy_pos = Vec3Df(4, rnd*(maxValidPosition[1] - minValidPosition[1]), -3);
+				if (randomValue%2 == 0) {
+					tmp_enemy_pos[0] = -3;
+				}
+				game.enemies.push_back(new Enemy(tmp_enemy_pos, game.hero.p));
+				game.numberOfEnemies++;
+			}
+		}
 		x_move += 0.04;
 		
 		if (x_move >= 50) {
