@@ -14,9 +14,9 @@ Game game;
 Vec3Df origin;
 float LightPos[4] = {0, 0, 0, 1};
 bool drawBoundingBox = true;
-float rotation = 0;
 int NbVertX=60, NbVertY=40;
 float x_move = 12;
+float minValidPosition[2] = {-1.3, -0.7}, maxValidPosition[2] = {3, 1.9};
 std::vector<GLuint> Texture;
 //vertices
 std::vector<float> SurfaceVertices3f;
@@ -220,28 +220,26 @@ void keyboard(unsigned char key, int x, int y)
     {
 	case 27:     // ESC
         	exit(0);
-	case 'b':
-		drawBoundingBox = !drawBoundingBox;
-		break;
-	case 'f': //flip enemy
-		//enemies[1].flip();
-		break;
-	case 'r': //rotate enemy
-		rotation += 45;
-		//enemies[1].zRotate(rotation);
-		break;
 	/* Movements */
 	case 'd':
-		game.hero.p[0] += 0.1;
+		if (game.hero.p[0] + 0.1 < maxValidPosition[0]) {
+			game.hero.p[0] += 0.1;
+		}
 		break;
 	case 'a':
-		game.hero.p[0] -= 0.1;
+		if (game.hero.p[0] - 0.1 > minValidPosition[0]) {
+			game.hero.p[0] -= 0.1;
+		}
 		break;
 	case 's':
-		game.hero.p[1] -= 0.1;
+		if (game.hero.p[1] - 0.1 > minValidPosition[1]) {
+			game.hero.p[1] -= 0.1;
+		}
 		break;
 	case 'w':
-		game.hero.p[1] += 0.1;
+		if (game.hero.p[1] + 0.1 < maxValidPosition[1]) {
+			game.hero.p[1] += 0.1;
+		}
 		break;
 	case 'j':
 		theta += 22.5;

@@ -51,6 +51,7 @@ void Game::display(void)
 	drawLight();
 	
 	//Collision detection
+	//hero bullets and enemies
 	vector<Bullet>::iterator ib = bullets.begin();
 	vector<Enemy>::iterator ie;
 	bool hit = false;
@@ -72,6 +73,7 @@ void Game::display(void)
 			hit = false;
 		}
 	}
+	//hero and enemies
 	ie = enemies.begin();
 	while (ie != enemies.end()) {
 		if (hero.isHit(*ie)) {
