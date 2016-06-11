@@ -102,13 +102,15 @@ void Game::display(void)
 				bossCount --;
 				if(bossCount%2!=0){
 					bossLife--;
-					cout<<"boss life:"<<bossLife<<endl;
 				}
 			}
 			boss.assignMesh(bossLife);
 		}
 		if (drawArm) {
 			boss.draw_boss_hands();
+			for(unsigned int i = 0; i < bossBullets.size();i++){
+				bossBullets[i].draw();
+			}
 			for (int i = 0; i < boss.boss_hand_size*boss.boss_hand_num; i += 1)
 			{
 				if (boss.hands[i]->isHit(hero)) {

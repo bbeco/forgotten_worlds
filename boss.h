@@ -37,7 +37,7 @@ public:
 	
 	Bullet shoot()
 	{
-		Bullet b(p,0);
+		Bullet b(p,180);
 		return b;
 	}
 	
@@ -91,7 +91,7 @@ public:
 	void create_boss_hands() {
         for (int i = 0;i < boss_hand_num*boss_hand_size; i++){
 			if(i%boss_hand_size == 0){
-				hands[i] = new Hand_Boss(Vec3Df(p[0],0.3*((i/boss_hand_size)+1),p[2]));
+				hands[i] = new Hand_Boss(Vec3Df(p[0]+0.3,p[1]+((i/boss_hand_size)),p[2]));
 			} else {
 				hands[i] = new Hand_Boss(Vec3Df(hands[i-1]->p[0]-(2*boss_hand_radius),hands[i-1]->p[1],hands[i-1]->p[2]));
 			}

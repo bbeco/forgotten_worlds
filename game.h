@@ -24,6 +24,7 @@ private:
 	void drawLight();
 public:
 	vector<Bullet> bullets;
+	vector<Bullet> bossBullets;
 	Boss boss;
 	Hero hero;
 	bool activateBoss;
