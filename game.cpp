@@ -32,7 +32,7 @@ Game::Game()
 	hero = Hero(Vec3Df(-1, 1, -3));
 	activateBoss = false;
 	drawArm = false;
-	boss = Boss(Vec3Df(4, 0, -3));
+	boss = Boss(Vec3Df(3.5, 0, -3));
 	bossLife = 10;
 	numberOfEnemies = 0;
 	bossCount = 20;
