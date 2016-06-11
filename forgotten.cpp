@@ -245,10 +245,17 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'j':
 		theta += 22.5;
+		//the angles must be in [-180; 180]
+		if (theta > 180) {
+			theta = theta - 360;
+		}
 		game.hero.zRotate(theta);
 		break;
 	case 'k':
 		theta -= 22.5;
+		if (theta < -180) {
+			theta = theta + 360;
+		}
 		game.hero.zRotate(theta); 
 		break;
 		

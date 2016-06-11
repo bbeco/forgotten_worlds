@@ -35,7 +35,7 @@ void Concrete::computeBoundingBox(void)
 		if (!flipped ) {
 			rotateZ(zRotation, tmp);
 		} else {
-			rotateZ(-zRotation, tmp);
+			rotateZ(180 - zRotation, tmp);
 		}
 		tmp[0] = (flipped) ? -tmp[0] : tmp[0];
 		for (int j = 0; j < 3; j++) {
@@ -117,13 +117,23 @@ void Concrete::drawBoundingBox(Vec3Df color)
 void Concrete::zRotate(float angle)
 {
 	zRotation = angle;
+	if (angle == 67.5 && flipped) {
+		flipped = false;
+	} else if (angle == 112.5 && !flipped) {
+		flipped = true;
+	} else if (angle == -112.5 && !flipped) {
+		flipped = true;
+	} else if (angle == -67.5 && flipped) {
+		flipped = false;
+	}
 	computeBoundingBox();
 };
 
 void Concrete::flip(void)
 {
 	flipped = !flipped;
-	computeBoundingBox();
+	//this is called in zRotate that calls computeBoundingBox()
+	//computeBoundingBox();
 };
 
 /**
@@ -183,7 +193,7 @@ void Concrete::draw() {
 		glRotatef(zRotation, 0, 0, 1);
 	} else {
 		glRotatef(180, 0, 1, 0);
-		glRotatef(-zRotation, 0, 0, 1);
+		glRotatef(180 - zRotation, 0, 0, 1);
 	}
 	mesh.draw();
 	glPopMatrix();
