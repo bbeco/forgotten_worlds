@@ -34,6 +34,7 @@ Game::Game()
 	drawArm = false;
 	boss = Boss(Vec3Df(4, 0, -3));
 	bossLife = 10;
+	bossCount = 20;
 };
 
 void Game::init() {};
@@ -92,10 +93,17 @@ void Game::display(void)
 	}
 	
 	if (activateBoss) {
+		
 		boss.draw();
+		
 		if (boss.isHit(hero)) {
-			if (bossLife > 0) {
-				bossLife--;
+			
+			if (bossCount > 0) {
+				bossCount --;
+				if(bossCount%2!=0){
+					bossLife--;
+					cout<<"boss life:"<<bossLife<<endl;
+				}
 			}
 			boss.assignMesh(bossLife);
 		}

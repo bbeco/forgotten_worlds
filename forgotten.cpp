@@ -318,6 +318,7 @@ void reshape(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 int count = 0;
+int bossCount = 0;
 void animate()
 {	
 	count++;
@@ -333,7 +334,7 @@ void animate()
 		it->update();
 	}
 	if(x_move <= 50){
-		x_move += 0.04;
+		x_move += 1.04;
 		
 		if (x_move >= 50) {
 			game.activateBoss = true;
@@ -342,8 +343,18 @@ void animate()
 		if (game.boss.p[0] >= 2) {
 			game.boss.p[0] -= 0.3;
 		} else {
-			game.boss.create_boss_hands();
-			game.drawArm = true;
+			if(bossCount == 0){
+				game.boss.create_boss_hands();
+				game.drawArm = true;
+				bossCount = 1;
+			} else {
+				if(game.bossLife == 0){
+					game.boss.update_boss_hand_pos(true);
+				}
+				else {
+					game.boss.update_boss_hand_pos(false);
+				}	
+			}
 		}
 	}
 }

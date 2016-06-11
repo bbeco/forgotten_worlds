@@ -45,6 +45,14 @@ public:
 
 class Boss: public Concrete
 {
+private:
+	float myAbs (float x)
+	{
+		if(x < 0){
+			x = -x;
+		}
+		return x;
+	}
 protected:
 	float PI;
 	int boss_hand_stacks;
@@ -63,7 +71,7 @@ public:
 	
 	Boss(Vec3Df pos = Vec3Df(0,0,0)) : Concrete(pos)
 	{
-		mesh.loadMesh("gargoyle.obj");
+		mesh.loadMesh("Bane_3.obj");
 		computeBoundingBox();
 		boss_hand_size = 10;
 		boss_hand_num = 2;
@@ -100,25 +108,31 @@ public:
 	{	
 		mesh = simplifiedMesh[life];
 	}
-//	void update_boss_hand_pos() {
-//		for (int i = 0; i < boss_hand_num*boss_hand_size; i++) {
-//			if(i%boss_hand_size != 0){
-//				hands[i]->p[0] = 2 * boss_hand_radius * abs(cos((i/2)*PI*((boss_hand_count % boss_hand_count_max) / boss_hand_period) + (i/boss_hand_size) * PI / 4));
-//				hands[i]->p[1] = 2 * boss_hand_radius * abs(sin((i/2)*PI*((boss_hand_count % boss_hand_count_max) / boss_hand_period) + (i/boss_hand_size) * PI / 4));
-//				
-//				if (count_up) {
-//						boss_hand_count = boss_hand_count + boss_hand_count_step;
-//						if (boss_hand_count == boss_hand_count_max)
-//								count_up = false;
-//				}
-//				else {
-//						boss_hand_count = boss_hand_count - boss_hand_count_step;
-//						if(boss_hand_count == 1)
-//								count_up = true;
-//				}                        
-//			}
-//		}
-//	}
+	
+	void update_boss_hand_pos(bool fly) {
+		for (int i = 0; i < boss_hand_num*boss_hand_size; i++) {
+			if(fly == true){
+				hands[i]->p[0] += 2 * boss_hand_radius * myAbs(cos((i/2)*PI*((boss_hand_count % boss_hand_count_max) / boss_hand_period) +(1-2*(i/boss_hand_size)) * PI/6))/1.41;
+				hands[i]->p[1] += 2 * boss_hand_radius * myAbs(sin((i/2)*PI*((boss_hand_count % boss_hand_count_max) / boss_hand_period) +(1-2*(i/boss_hand_size))* PI/6));
+			}
+			if(i%boss_hand_size != 0){
+				if(fly == false){
+					hands[i]->p[0] = hands[i-1]->p[0] - 2 * boss_hand_radius * myAbs(cos((i/2)*PI*((boss_hand_count % boss_hand_count_max) / boss_hand_period) +(1-2*(i/boss_hand_size)) * PI/6))/1.41;
+					hands[i]->p[1] = hands[i-1]->p[1] + 2 * boss_hand_radius * myAbs(sin((i/2)*PI*((boss_hand_count % boss_hand_count_max) / boss_hand_period) +(1-2*(i/boss_hand_size))* PI/6));
+				}
+				if (count_up) {
+						boss_hand_count = boss_hand_count + boss_hand_count_step;
+						if (boss_hand_count == boss_hand_count_max)
+								count_up = false;
+				}
+				else {
+						boss_hand_count = boss_hand_count - boss_hand_count_step;
+						if(boss_hand_count == 1)
+								count_up = true;
+				}                        
+			}
+		}
+	}
 
 	
 };
