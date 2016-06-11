@@ -326,6 +326,8 @@ void reshape(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 int count = 0;
+int sign = 1;
+bool text = true;
 void animate()
 {	
 	count++;
@@ -343,6 +345,8 @@ void animate()
 	}
 	
 	for (vector<Bullet>::iterator it = game.bullets.begin(); it != game.bullets.end(); it++) {
+		it->mytext = text;
+		text = !text;
 		it->update();
 	}
 	if(x_move <= 50){
@@ -373,17 +377,31 @@ void animate()
 		if (game.boss.p[0] >= 2) {
 			game.boss.p[0] -= 0.3;
 		} else {
-			game.boss.create_boss_hands();
+			if(game.boss.p[1]+0.5 > 1.5){
+				sign = -1;
+			}
+			if(game.boss.p[1]-0.5 < -1.5){
+				sign = 1;
+			}
+			game.boss.p[1] += sign*0.2;
+			if(game.bossLife != 0){
+				game.boss.create_boss_hands();
+			}
 			game.drawArm = true;
+			if(game.bossLife == 0){
+				game.boss.update_boss_hand_pos(true);
+				game.bossBullets.clear();
+			} else {
+				game.boss.update_boss_hand_pos(false);
+				game.bossBullets.push_back(game.boss.hands[9]->shoot());
+				game.bossBullets.push_back(game.boss.hands[18]->shoot());
+				for (it = game.bossBullets.begin(); (it->p[0] > 3.5) || (it->p[0] < -3.5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
+				game.bossBullets.erase(game.bossBullets.begin(), it);
+				for (it = game.bossBullets.begin(); it != game.bossBullets.end(); it++) {
+					it->update();
+				}
+			}	
 		}
-	}
-	
-	/*
-	 * Updating enemies position
-	 */
-	for (unsigned int i = 0; i < game.enemies.size(); i += 1)
-	{
-		//game.enemies[i].update(game.hero.p);
 	}
 }
 

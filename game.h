@@ -18,17 +18,19 @@ private:
 	Vec3Df red;
 	Vec3Df green;
 	Vec3Df blue;
-	unsigned int bossLife;
+	
+	unsigned int bossCount;
 	void drawLight();
 public:
 	vector<Enemy*> enemies;
 	vector<Bullet> bullets;
+	vector<Bullet> bossBullets;
 	Boss boss;
 	Hero hero;
 	bool activateBoss;
 	bool drawArm;
 	int numberOfEnemies;
-	
+	unsigned int bossLife;
 	Game();
 	void setScreenOrigin(Vec3Df o);
 	void init();

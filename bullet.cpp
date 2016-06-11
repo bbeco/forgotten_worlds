@@ -18,16 +18,16 @@ Vec3Df computeSpeed(float zRotation){
 		return Vec3Df(0.4*c,0.4*s,0); 
 	}
 }
-Bullet::Bullet(Vec3Df pos, float theta): Concrete(pos)
+Bullet::Bullet(Vec3Df pos, float theta,Vec3Df col): Concrete(pos)
 {
-	size = 0.1;
+	size = 0.05;
 	computeBoundingBox();
 	zRotation = theta;
 	speed = computeSpeed(zRotation);
 	if(flipped){
 		speed[0] = -speed[0];
 	}
-	PPMImage image3("bullet.ppm");
+	PPMImage image3("brick.ppm");
 	glGenTextures(1, &text[0]);
 	glBindTexture(GL_TEXTURE_2D, text[0]);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image3.sizeX, image3.sizeY, 
@@ -38,7 +38,8 @@ Bullet::Bullet(Vec3Df pos, float theta): Concrete(pos)
 	glBindTexture(GL_TEXTURE_2D, text[1]);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image2.sizeX, image2.sizeY, 
 		GL_RGB, GL_UNSIGNED_BYTE, image2.data);
-	mytext = true;
+	mytext = false;
+	this->col = col;
 }
 
 void Bullet::computeBoundingBox()
@@ -130,7 +131,7 @@ void Bullet::draw()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, text[1]);
 	}
-	drawUnitCube(0,1,1,size);
+	drawUnitCube(col[0],col[1],col[2],size);
 	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 }

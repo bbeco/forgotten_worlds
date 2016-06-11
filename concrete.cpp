@@ -185,7 +185,6 @@ void Concrete::drawOrigin(Vec3Df color)
 };
 
 void Concrete::draw() {
-	drawPoint(p);
 	Vec3Df start = p - bbOrigin;
 	glPushMatrix();
 	glTranslatef(start[0], start[1], start[2]);

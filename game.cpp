@@ -35,6 +35,7 @@ Game::Game()
 	boss = Boss(Vec3Df(4, 0, -3));
 	bossLife = 10;
 	numberOfEnemies = 0;
+	bossCount = 20;
 };
 
 void Game::init() {};
@@ -106,15 +107,24 @@ void Game::display(void)
 	}
 	
 	if (activateBoss) {
+		
 		boss.draw();
+		
 		if (boss.isHit(hero)) {
-			if (bossLife > 0) {
-				bossLife--;
+			
+			if (bossCount > 0) {
+				bossCount --;
+				if(bossCount%2!=0){
+					bossLife--;
+				}
 			}
 			boss.assignMesh(bossLife);
 		}
 		if (drawArm) {
 			boss.draw_boss_hands();
+			for(unsigned int i = 0; i < bossBullets.size();i++){
+				bossBullets[i].draw();
+			}
 			for (int i = 0; i < boss.boss_hand_size*boss.boss_hand_num; i += 1)
 			{
 				if (boss.hands[i]->isHit(hero)) {
