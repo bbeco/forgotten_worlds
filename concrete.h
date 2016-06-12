@@ -21,7 +21,7 @@ public:
 	Vec3Df p; //object position in the scene
 	Concrete(Vec3Df pos);
 	bool isHit(Concrete & other);
-	void draw();
+	void draw(Vec3Df color);
 	void drawBoundingBox(Vec3Df color = Vec3Df(0,1,0));
 	void drawOrigin(Vec3Df color = Vec3Df(1,0,0));
 	void zRotate(float angle);

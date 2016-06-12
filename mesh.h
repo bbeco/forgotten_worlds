@@ -52,7 +52,8 @@ public:
     void computeVertexNormals ();
     void centerAndScaleToUnit ();
     void computeBoundingCube();
-    void draw();
+    void draw(Vec3Df color);
+    void draw(Vec3Df light, Vec3Df camera, Vec3Df color);
     void drawSmooth();
     void scale(float scaling);
     Mesh simplifyMesh(unsigned int r);

@@ -34,7 +34,7 @@ enemy.o : enemy.h enemy.cpp
 
 concrete.o: concrete.h mesh.h mesh.o
 
-boss.o: boss.h bullet.h concrete.h 
+boss.o: boss.cpp boss.h bullet.h concrete.h 
 
 util.o: util.h
 

@@ -42,6 +42,7 @@ void Game::init() {};
 void Game::setScreenOrigin(Vec3Df origin)
 {
 	screenOrigin = origin;
+	camPos = -origin;
 };
 
 void Game::display(void)
@@ -111,14 +112,13 @@ void Game::display(void)
 	 * Drawing scene
 	 */
 	for (unsigned int i = 0; i < enemies.size(); i++) {
-		enemies[i]->draw();
+		enemies[i]->draw(Vec3Df(0.75, 0.75, 0.75));
 	}
 	if(heroLife%5 == 0){
-		glColor3f(1,0,0);
+		hero.draw(Vec3Df(1, 0, 0));
+	} else {
+		hero.draw(Vec3Df(0.5, 0.97, 1));
 	}
-		hero.draw();
-//	}	
-		glColor3f(1,1,1);
 	
 	for(unsigned int i=0;i<bullets.size();i++) {
 		bullets[i].draw();
@@ -128,9 +128,7 @@ void Game::display(void)
 		enemyBullets[i].draw();
 	}
 	if (activateBoss) {
-		
-		boss.draw();
-		//collision detection between hero and boss
+		boss.draw(camPos, Vec3Df(1, 1, 0));
 		if (boss.isHit(hero)) {
 			heroLife--;
 			if (bossCount > 0) {

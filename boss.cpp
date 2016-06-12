@@ -13,14 +13,15 @@ void Hand_Boss::computeBoundingBox()
 		bbSize = Vec3Df(2*boss_hand_radius,2*boss_hand_radius,2*boss_hand_radius);
 	}
 
-void Hand_Boss::draw()
-	{		
-		Vec3Df start = p - bbOrigin;
-		glPushMatrix();
-		glTranslatef(start[0], start[1], start[2]);
-		glutSolidSphere(boss_hand_radius, boss_hand_stacks, boss_hand_stacks);	
-		glPopMatrix();
-	}
+void Hand_Boss::draw(Vec3Df bossColor)
+{		
+	Vec3Df start = p - bbOrigin;
+	glPushMatrix();
+	glTranslatef(start[0], start[1], start[2]);
+	glColor3f(bossColor[0], bossColor[1], bossColor[2]);
+	glutSolidSphere(boss_hand_radius, boss_hand_stacks, boss_hand_stacks);	
+	glPopMatrix();
+}
 
 Bullet Hand_Boss::shoot()
 	{
@@ -65,9 +66,9 @@ void Boss::create_boss_hands()
 	
 void Boss::draw_boss_hands() 
 	{
-		glColor3f(0, 0, 1);
+		glColor3f(bossColor[0], bossColor[1], bossColor[2]);
 		for(int i=0; i<boss_hand_num*boss_hand_size;i++){
-			hands[i]->draw();
+			hands[i]->draw(bossColor);
 		}
 		glColor3f(1,1,1);
 	}		
@@ -110,3 +111,15 @@ void Boss::update_boss_hand_pos(bool fly)
 			}
 		}
 	}	
+
+void Boss::draw(Vec3Df cameraPos, Vec3Df color)
+{
+	bossColor = color;
+	Vec3Df start = p - bbOrigin;
+	glPushMatrix();
+	glTranslatef(start[0], start[1], start[2]);
+	cameraPos -= start;
+	Vec3Df lightPos = -start;
+	mesh.draw(lightPos, cameraPos, color);
+	glPopMatrix();
+}

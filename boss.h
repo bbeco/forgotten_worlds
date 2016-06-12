@@ -20,10 +20,9 @@ public:
 	
 	void computeBoundingBox();
 	
-	void draw();
+	void draw(Vec3Df color);
 	
 	Bullet shoot();
-	
 	
 };
 
@@ -40,13 +39,14 @@ protected:
 	float boss_hand_radius;
 		
 public: 
+	Vec3Df bossColor;
 	int boss_hand_size;
 	int boss_hand_num;
 	Hand_Boss** hands;
 	Mesh simplifiedMesh[12];
 	
 	Boss(Vec3Df pos = Vec3Df(0,0,0));
-	
+	void draw(Vec3Df cameraPos, Vec3Df color);
 	void create_boss_hands();
 	
 	void draw_boss_hands();

@@ -184,7 +184,7 @@ void Concrete::drawOrigin(Vec3Df color)
 	glPopMatrix();
 };
 
-void Concrete::draw() {
+void Concrete::draw(Vec3Df color) {
 	Vec3Df start = p - bbOrigin;
 	glPushMatrix();
 	glTranslatef(start[0], start[1], start[2]);
@@ -194,6 +194,6 @@ void Concrete::draw() {
 		glRotatef(180, 0, 1, 0);
 		glRotatef(180 - zRotation, 0, 0, 1);
 	}
-	mesh.draw();
+	mesh.draw(color);
 	glPopMatrix();
 };

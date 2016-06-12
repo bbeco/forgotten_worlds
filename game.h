@@ -19,6 +19,7 @@ private:
 	Vec3Df green;
 	Vec3Df blue;
 	int heroLife;
+	Vec3Df camPos, lightPos;
 	unsigned int bossCount;
 	void drawLight();
 public:
