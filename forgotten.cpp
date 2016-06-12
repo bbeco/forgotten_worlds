@@ -393,7 +393,7 @@ void animate()
 				}
 			} 
 		}
-		x_move += 0.1;
+		x_move += 0.04;
 		if (x_move >= 50) {
 			
 			
@@ -421,15 +421,21 @@ void animate()
 				game.bossBullets.clear();
 			} else {
 				game.boss.update_boss_hand_pos(false);
-			
-				game.bossBullets.push_back(game.boss.hands[13]->shoot());
-				game.bossBullets.push_back(game.boss.hands[14]->shoot());
-				game.bossBullets.push_back(game.boss.hands[29]->shoot());
-				for (it = game.bossBullets.begin(); (it->p[0] > 5) || (it->p[0] < -5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
-				game.bossBullets.erase(game.bossBullets.begin(), it);
-				for (it = game.bossBullets.begin(); it != game.bossBullets.end(); it++) {
-					it->update();
+				//add boss' bullets
+				if(countBullet == 1 || countBullet ==2){
+					game.bossBullets.push_back(game.boss.hands[14]->shoot());
+					game.bossBullets.push_back(game.boss.hands[29]->shoot());
 				}
+				if(!game.bossBullets.empty()){
+					//erase boss'bullets out of screen
+					for (it = game.bossBullets.begin(); (it->p[0] > 5) || (it->p[0] < -5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
+					game.bossBullets.erase(game.bossBullets.begin(), it);
+					//update boss' bullets
+					for (it = game.bossBullets.begin(); it != game.bossBullets.end(); it++) {
+						it->update();
+					}
+				}
+			
 			}	
 		}
 	}

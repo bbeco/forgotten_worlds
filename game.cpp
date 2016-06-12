@@ -34,7 +34,7 @@ Game::Game()
 	bossLife = 12;
 	numberOfEnemies = 0;
 	bossCount = 24;
-	heroLife = 400;
+	heroLife = 399;
 };
 
 void Game::init() {};
@@ -113,7 +113,7 @@ void Game::display(void)
 	for (unsigned int i = 0; i < enemies.size(); i++) {
 		enemies[i]->draw();
 	}
-//	if(heroLife > 0){
+//	if(heroLife%5 != 0){
 		hero.draw();
 //	}
 	
