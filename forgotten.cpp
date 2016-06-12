@@ -393,21 +393,21 @@ void animate()
 		/*
 		 * Creating an enemy
 		 */
-//		if (game.numberOfEnemies < MAX_ENEMY_NUMBER) {
-//			//srand();
-//			//a random value in the range 1 to 100
-//			int randomValue = (int)(rand() % 100 + 1);
-//			//randomValue = 100;
-//			if (randomValue <= enemyAppearenceFrequency) {
-//				float rnd = (((float)rand())/RAND_MAX);
-//				Vec3Df tmp_enemy_pos = Vec3Df(4, rnd*(maxValidPosition[1] - minValidPosition[1]), -3);
-//				if (randomValue%2 == 0) {
-//					tmp_enemy_pos[0] = -3;
-//				}
-//				game.enemies.push_back(new Enemy(tmp_enemy_pos, game.hero.p));
-//				game.numberOfEnemies++;
-//			}
-//		}
+		if (game.numberOfEnemies < MAX_ENEMY_NUMBER) {
+			//srand();
+			//a random value in the range 1 to 100
+			int randomValue = (int)(rand() % 100 + 1);
+			//randomValue = 100;
+			if (randomValue <= enemyAppearenceFrequency) {
+				float rnd = (((float)rand())/RAND_MAX);
+				Vec3Df tmp_enemy_pos = Vec3Df(4, rnd*(maxValidPosition[1] - minValidPosition[1]), -3);
+				if (randomValue%2 == 0) {
+					tmp_enemy_pos[0] = -3;
+				}
+				game.enemies.push_back(new Enemy(tmp_enemy_pos, game.hero.p));
+				game.numberOfEnemies++;
+			}
+		}
 		x_move += 0.04;
 		
 		if (x_move >= 50) {
