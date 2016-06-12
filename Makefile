@@ -8,8 +8,8 @@ CPPFLAGS=-g -Wall -Werror
 
 all: forgotten
 
-forgotten: forgotten.o mesh.o concrete.o util.o game.o enemy.o hero.o loadppm.o boss.h grid.o
-	$(CC) $(CPPFLAGS) -o forgotten forgotten.o mesh.o concrete.o util.o game.o enemy.o hero.o loadppm.o boss.h bullet.o grid.o $(LDLIBS)
+forgotten: forgotten.o mesh.o concrete.o util.o game.o enemy.o hero.o loadppm.o boss.o grid.o
+	$(CC) $(CPPFLAGS) -o forgotten forgotten.o mesh.o concrete.o util.o game.o enemy.o hero.o loadppm.o boss.o bullet.o grid.o $(LDLIBS)
 
 collision_detection: collision_detection.o enemy.o concrete.o util.o
 	$(CC) $(CPPFLAGS) -o collision_detection collision_detection.o mesh.o concrete.o util.o enemy.o $(LDLIBS)
@@ -33,6 +33,8 @@ mesh.o: mesh.h rotation.hpp grid.h
 enemy.o : enemy.h enemy.cpp
 
 concrete.o: concrete.h mesh.h mesh.o
+
+boss.o: boss.h bullet.h concrete.h 
 
 util.o: util.h
 

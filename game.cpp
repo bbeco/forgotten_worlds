@@ -113,9 +113,12 @@ void Game::display(void)
 	for (unsigned int i = 0; i < enemies.size(); i++) {
 		enemies[i]->draw();
 	}
-//	if(heroLife%5 != 0){
+	if(heroLife%5 == 0){
+		glColor3f(1,0,0);
+	}
 		hero.draw();
-//	}
+//	}	
+		glColor3f(1,1,1);
 	
 	for(unsigned int i=0;i<bullets.size();i++) {
 		bullets[i].draw();
