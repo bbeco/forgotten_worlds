@@ -25,6 +25,7 @@ public:
 	vector<Enemy*> enemies;
 	vector<Bullet> bullets;
 	vector<Bullet> bossBullets;
+	vector<Bullet> enemyBullets;
 	Boss boss;
 	Hero hero;
 	bool activateBoss;

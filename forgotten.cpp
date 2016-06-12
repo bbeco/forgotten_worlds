@@ -336,15 +336,18 @@ void animate()
 		game.bullets.push_back(game.hero.shoot());
 	}
 	vector<Bullet>::iterator it;
+	//erase hero's bullets out of screen
 	for (it = game.bullets.begin(); (it->p[0] > 3.5) || (it->p[0] < -3.5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
 	game.bullets.erase(game.bullets.begin(), it);
+	
 	
 	//updating enemy position and orientation
 	for (unsigned int i = 0; i < game.enemies.size(); i++) {
 		game.enemies[i]->update(game.hero.p);
 	}
 	
-	for (vector<Bullet>::iterator it = game.bullets.begin(); it != game.bullets.end(); it++) {
+	//update hero's bullets (position and texture)
+	for (it = game.bullets.begin(); it != game.bullets.end(); it++) {
 		it->mytext = text;
 		text = !text;
 		it->update();
@@ -367,11 +370,26 @@ void animate()
 				game.enemies.push_back(new Enemy(tmp_enemy_pos, game.hero.p));
 				game.numberOfEnemies++;
 			}
+		//add enemies's bullets 
+			if(game.enemies.size() != 0){
+				for(unsigned int i = 0; i < game.enemies.size();i++){
+					game.enemyBullets.push_back(game.enemies[i]->shoot());
+				}
+				//erase enemies' bullets out of screen
+				for (it = game.enemyBullets.begin(); (it->p[0] > 6) || (it->p[0] < -6) || (it->p[1] > 6) || (it->p[1] < -6); it++);
+				game.enemyBullets.erase(game.enemyBullets.begin(), it);
+		
+				//update enemies' bullets (just position)
+				for (it = game.enemyBullets.begin(); it != game.enemyBullets.end(); it++) {
+						it->update();
+				}
+			} 
 		}
-		x_move += 0.04;
+		x_move += 0.02;
 		
 		if (x_move >= 50) {
 			game.activateBoss = true;
+			game.enemyBullets.clear();
 		}
 	} else {
 		if (game.boss.p[0] >= 2) {

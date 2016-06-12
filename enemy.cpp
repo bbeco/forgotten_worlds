@@ -48,9 +48,9 @@ void Enemy::update(Vec3Df hp)
 	zRotate(computed_orientation);
 };
 
-/*Bullet Enemy::shoot()
+Bullet Enemy::shoot()
 {
-	Bullet b;
+	Bullet b(p,zRotation,Vec3Df(1,0,1));
 	return b;
 };
-*/
+

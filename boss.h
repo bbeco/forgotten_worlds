@@ -37,7 +37,7 @@ public:
 	
 	Bullet shoot()
 	{
-		Bullet b(p,180,Vec3Df(1,1,1));
+		Bullet b(p,180,Vec3Df(0.53,0.8,0.9));
 		return b;
 	}
 	

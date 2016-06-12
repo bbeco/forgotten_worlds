@@ -93,7 +93,9 @@ void Game::display(void)
 			hero.drawBoundingBox();
 		}
 	}
-	
+	if(enemies.size() == 0){
+		enemyBullets.clear();
+	}
 	/*
 	 * Drawing scene
 	 */
@@ -105,7 +107,9 @@ void Game::display(void)
 	for(unsigned int i=0;i<bullets.size();i++) {
 		bullets[i].draw();
 	}
-	
+	for(unsigned int i=0;i<enemyBullets.size();i++) {
+		enemyBullets[i].draw();
+	}
 	if (activateBoss) {
 		
 		boss.draw();
