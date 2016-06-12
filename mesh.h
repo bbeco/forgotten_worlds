@@ -48,11 +48,13 @@ public:
 	//extent of the bounding box (for simplicity, assumed to be the same along each axis)
     float bbEdgeSize;
     Grid grid;
+    Vec3Df meshColor;
     bool loadMesh(const char * filename);
     void computeVertexNormals ();
     void centerAndScaleToUnit ();
     void computeBoundingCube();
     void draw();
+    void draw(Vec3Df light, Vec3Df camera, Vec3Df color);
     void drawSmooth();
     void scale(float scaling);
     Mesh simplifyMesh(unsigned int r);

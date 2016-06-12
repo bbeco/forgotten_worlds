@@ -43,6 +43,7 @@ void Game::init() {};
 void Game::setScreenOrigin(Vec3Df origin)
 {
 	screenOrigin = origin;
+	camPos = -origin;
 };
 
 void Game::display(void)
@@ -108,8 +109,8 @@ void Game::display(void)
 	
 	if (activateBoss) {
 		
-		boss.draw();
-		
+		//boss.draw(camPos, Vec3Df(0.3, 0.2, 0.09));
+		boss.draw(camPos, Vec3Df(1, 1, 0));
 		if (boss.isHit(hero)) {
 			
 			if (bossCount > 0) {

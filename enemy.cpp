@@ -10,6 +10,7 @@ Enemy::Enemy(Vec3Df pos, Vec3Df hp) : Concrete(pos)
 	}
 	zRotation = initial_orientation;
 	computeBoundingBox();
+	mesh.meshColor = Vec3Df(0.75, 0.75, 0.75);
 };
 
 

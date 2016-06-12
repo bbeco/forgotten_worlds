@@ -18,6 +18,7 @@ private:
 	Vec3Df red;
 	Vec3Df green;
 	Vec3Df blue;
+	Vec3Df camPos, lightPos;
 	
 	unsigned int bossCount;
 	void drawLight();

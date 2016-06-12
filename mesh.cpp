@@ -71,6 +71,7 @@ void Mesh::drawSmooth(){
 }
 
 void Mesh::draw(){
+	glColor3f(meshColor[0], meshColor[1], meshColor[2]);
     glBegin(GL_TRIANGLES);
 
     for (unsigned int i=0;i<triangles.size();++i)
@@ -86,6 +87,30 @@ void Mesh::draw(){
 
     }
     glEnd();
+}
+
+void Mesh::draw(Vec3Df lightPos, Vec3Df camPos, Vec3Df color){
+	glDisable(GL_LIGHTING);
+    glBegin(GL_TRIANGLES);
+
+    for (unsigned int i=0;i<triangles.size();++i)
+    {
+        Vec3Df edge01 = vertices[triangles[i].v[1]].p -  vertices[triangles[i].v[0]].p;
+        Vec3Df edge02 = vertices[triangles[i].v[2]].p -  vertices[triangles[i].v[0]].p;
+        Vec3Df n = Vec3Df::crossProduct (edge01, edge02);
+        n.normalize ();
+        glNormal3f(n[0], n[1], n[2]);
+        for(int v = 0; v < 3 ; v++){
+            Vec3Df diffNorm = camPos + lightPos - 2*vertices[triangles[i].v[v]].p;
+            diffNorm.normalize();
+            float l = std::pow(Vec3Df::dotProduct(diffNorm, n), 7);
+            glColor3f(l*color[0], l*color[1], l*color[2]);
+            glVertex3f(vertices[triangles[i].v[v]].p[0], vertices[triangles[i].v[v]].p[1] , vertices[triangles[i].v[v]].p[2]);
+        }
+
+    }
+    glEnd();
+    glEnable(GL_LIGHTING);
 }
 
 

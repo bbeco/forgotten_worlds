@@ -26,11 +26,12 @@ public:
 		bbOrigin = Vec3Df(-0.1, -0.1, -0.1);
 		bbSize = Vec3Df(2*boss_hand_radius,2*boss_hand_radius,2*boss_hand_radius);
 	}
-	void draw()
+	void draw(Vec3Df color)
 	{		
 		Vec3Df start = p - bbOrigin;
 		glPushMatrix();
 		glTranslatef(start[0], start[1], start[2]);
+		glColor3f(color[0], color[1], color[2]);
 		glutSolidSphere(boss_hand_radius, boss_hand_stacks, boss_hand_stacks);	
 		glPopMatrix();
 	}
@@ -64,6 +65,7 @@ protected:
 	float boss_hand_radius;
 		
 public: 
+	Vec3Df bossColor;
 	int boss_hand_size;
 	int boss_hand_num;
 	Hand_Boss** hands;
@@ -88,6 +90,18 @@ public:
 			simplifiedMesh[i] = mesh.simplifyMesh(i*2);
 		}
 	}
+	
+	void draw(Vec3Df cameraPos, Vec3Df color)
+	{
+		bossColor = color;
+		Vec3Df start = p - bbOrigin;
+		glPushMatrix();
+		glTranslatef(start[0], start[1], start[2]);
+		cameraPos -= start;
+		Vec3Df lightPos = -start;
+		mesh.draw(lightPos, cameraPos, color);
+		glPopMatrix();
+	}
 	void create_boss_hands() {
         for (int i = 0;i < boss_hand_num*boss_hand_size; i++){
 			if(i%boss_hand_size == 0){
@@ -102,9 +116,9 @@ public:
 		}
 	}
 	void draw_boss_hands() {
-		glColor3f(0, 0, 1);
+		glColor3f(bossColor[0], bossColor[1], bossColor[2]);
 		for(int i=0; i<boss_hand_num*boss_hand_size;i++){
-			hands[i]->draw();
+			hands[i]->draw(bossColor);
 		}
 		glColor3f(1,1,1);
 	}
