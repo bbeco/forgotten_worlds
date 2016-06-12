@@ -434,7 +434,7 @@ void animate()
 				}
 			} 
 		}
-		x_move += 0.04;
+		x_move += 1.04;
 		if (x_move >= 50) {
 			
 			

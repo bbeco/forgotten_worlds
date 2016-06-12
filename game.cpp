@@ -34,7 +34,7 @@ Game::Game()
 	bossLife = 12;
 	numberOfEnemies = 0;
 	bossCount = 24;
-	heroLife = 399;
+	heroLife = 249;
 };
 
 void Game::init() {};
@@ -114,12 +114,14 @@ void Game::display(void)
 	for (unsigned int i = 0; i < enemies.size(); i++) {
 		enemies[i]->draw(Vec3Df(0.75, 0.75, 0.75));
 	}
-	if(heroLife%5 == 0){
-		hero.draw(Vec3Df(1, 0, 0));
-	} else {
-		hero.draw(Vec3Df(0.5, 0.97, 1));
+	cout<<"hero life:"<<heroLife<<endl;
+	if(heroLife > 0){
+		if(heroLife%5 == 0){
+			hero.draw(Vec3Df(1, 0, 0));
+		} else {
+			hero.draw(Vec3Df(0.5, 0.97, 1));
+		}
 	}
-	
 	for(unsigned int i=0;i<bullets.size();i++) {
 		bullets[i].draw();
 	}
@@ -165,7 +167,17 @@ void Game::display(void)
 				bossBullets[i].draw();
 			}
 			//collision detection with boss' arms
-		
+			if(!bossBullets.empty()){
+				ib = bossBullets.begin();
+				while(ib != bossBullets.end()){
+					if(ib->isHit(hero)){
+						ib = bossBullets.erase(ib);
+						heroLife--;
+					} else {
+						ib++;
+					}
+				}
+			}	
 			for (int i = 0; i < boss.boss_hand_size*boss.boss_hand_num; i += 1)
 			{
 				//collision detection between hero and arms
