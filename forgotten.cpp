@@ -15,7 +15,7 @@ unsigned int w_win = 640, h_win = 480;
 float enemyAppearenceFrequency = 3;
 Game game;
 Vec3Df origin;
-float LightPos[4] = {1, 0, 3, 1};
+Vec3Df LightPos;
 bool drawBoundingBox = true;
 int NbVertX=60, NbVertY=40;
 float x_move = 12;
@@ -230,10 +230,16 @@ void drawSurface()
 		for (int triVertex=0; triVertex<3;++triVertex)
 		{
 			int vIndex=SurfaceTriangles3ui[t+triVertex];
-
+			Vec3Df v = Vec3Df(SurfaceVertices3f[3*vIndex], SurfaceVertices3f[3*vIndex + 1], SurfaceVertices3f[3*vIndex + 2]);
+			Vec3Df n = Vec3Df(SurfaceNormals3f[3*vIndex], SurfaceNormals3f[3*vIndex + 1], SurfaceNormals3f[3*vIndex + 2]);
+			Vec3Df diff = LightPos - v;
+			diff.normalize();
+			float l = Vec3Df::dotProduct(diff, n);
+			if (l < 0) l = 0;
 			glTexCoord2fv(&(SurfaceTexCoords2f[2*vIndex]));
 			glNormal3fv(&(SurfaceNormals3f[3*vIndex]));
-			glColor3fv(&(SurfaceColors3f[3*vIndex]));
+			//glColor3fv(&(SurfaceColors3f[3*vIndex]));
+			glColor3f(SurfaceColors3f[3*vIndex]*l, (SurfaceColors3f[3*vIndex + 1])*l, (SurfaceColors3f[3*vIndex + 2])*l);
 			glVertex3fv(&(SurfaceVertices3f[3*vIndex]));
 		}
 		glEnd();
@@ -301,7 +307,7 @@ void setOrigin()
 		exit(1);
 	}
 	origin = Vec3Df((float)objX, (float)objY, (float)objZ);
-	cout << "origin = " << origin << endl;
+	LightPos = origin;
 }
 
 void display() {
@@ -310,9 +316,18 @@ void display() {
 	glBindTexture(GL_TEXTURE_2D, Texture[2]);
 	glPushMatrix();
 	glTranslatef(-x_move,-2.5,-0.5);
+	Vec3Df tmp = LightPos;
+	LightPos[0] -= -x_move;
+	LightPos[1] -= -2.5;
+	LightPos[2] -= -0.5;
 	glRotatef(-45,1,0,0);
-//	drawPoint(Vec3Df(LightPos[0], LightPos[1], LightPos[2]));
+	//LightPos[0]; no changes
+	LightPos[1] = (LightPos[1] - LightPos[2])/sqrt(2);
+	LightPos[2] = (LightPos[1] + LightPos[2])/sqrt(2);
+	glDisable(GL_LIGHTING);
 	drawSurface();
+	glEnable(GL_LIGHTING);
+	LightPos = tmp;
 	glBindTexture(GL_TEXTURE_2D,0);
 	glDisable(GL_TEXTURE_2D);
 	
@@ -333,7 +348,7 @@ void displayInternal(void)
 
 	//drawAbsoluteCoord();
     	game.display();
-    display();
+	display();
     	
     glutSwapBuffers();
     glutPostRedisplay();
