@@ -376,7 +376,7 @@ void animate()
 					game.enemyBullets.push_back(game.enemies[i]->shoot());
 				}
 				//erase enemies' bullets out of screen
-				for (it = game.enemyBullets.begin(); (it->p[0] > 6) || (it->p[0] < -6) || (it->p[1] > 6) || (it->p[1] < -6); it++);
+				for (it = game.enemyBullets.begin(); (it->p[0] > 8) || (it->p[0] < -8) || (it->p[1] > 8) || (it->p[1] < -8); it++);
 				game.enemyBullets.erase(game.enemyBullets.begin(), it);
 		
 				//update enemies' bullets (just position)
@@ -385,11 +385,12 @@ void animate()
 				}
 			} 
 		}
-		x_move += 0.02;
-		
+		x_move += 0.04;
+		cout<<x_move<<endl;
 		if (x_move >= 50) {
 			game.activateBoss = true;
 			game.enemyBullets.clear();
+			game.enemies.clear();
 		}
 	} else {
 		if (game.boss.p[0] >= 2) {
@@ -411,8 +412,9 @@ void animate()
 				game.bossBullets.clear();
 			} else {
 				game.boss.update_boss_hand_pos(false);
-				game.bossBullets.push_back(game.boss.hands[9]->shoot());
-				game.bossBullets.push_back(game.boss.hands[18]->shoot());
+				game.bossBullets.push_back(game.boss.hands[13]->shoot());
+				game.bossBullets.push_back(game.boss.hands[14]->shoot());
+				game.bossBullets.push_back(game.boss.hands[29]->shoot());
 				for (it = game.bossBullets.begin(); (it->p[0] > 3.5) || (it->p[0] < -3.5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
 				game.bossBullets.erase(game.bossBullets.begin(), it);
 				for (it = game.bossBullets.begin(); it != game.bossBullets.end(); it++) {

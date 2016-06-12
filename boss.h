@@ -73,7 +73,7 @@ public:
 	{
 		mesh.loadMesh("Bane_3.obj");
 		computeBoundingBox();
-		boss_hand_size = 10;
+		boss_hand_size = 15;
 		boss_hand_num = 2;
 		PI = 3.14;
 		boss_hand_stacks = 50;

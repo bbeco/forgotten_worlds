@@ -36,6 +36,7 @@ Game::Game()
 	bossLife = 10;
 	numberOfEnemies = 0;
 	bossCount = 20;
+	heroLife = 400;
 };
 
 void Game::init() {};
@@ -55,7 +56,7 @@ void Game::display(void)
 	/*
 	 * Collision detection
 	 */
-	//hero bullets and enemies
+	//hero's bullets and enemies
 	vector<Bullet>::iterator ib = bullets.begin();
 	vector<Enemy*>::iterator ie;
 	bool hit = false;
@@ -80,30 +81,44 @@ void Game::display(void)
 			hit = false;
 		}
 	}
+	//hero and enemies' bullets
+	ib = enemyBullets.begin();
+	while(ib != enemyBullets.end()){
+		if(ib->isHit(hero)){
+			heroLife--;
+			ib = enemyBullets.erase(ib);
+		} else {
+			ib++;	
+		}
+	}
 	//hero and enemies
 	ie = enemies.begin();
 	while (ie != enemies.end()) {
 		if (hero.isHit(**ie)) {
-			hero.drawBoundingBox(red);
+			//hero.drawBoundingBox(red);
+			heroLife--;
 			delete(*ie);
 			ie = enemies.erase(ie);
 			numberOfEnemies--;
 		} else {
 			ie++;
-			hero.drawBoundingBox();
+			//hero.drawBoundingBox();
 		}
 	}
 	if(enemies.size() == 0){
 		enemyBullets.clear();
 	}
+	
 	/*
 	 * Drawing scene
 	 */
 	for (unsigned int i = 0; i < enemies.size(); i++) {
 		enemies[i]->draw();
-		enemies[i]->drawBoundingBox();
+		//enemies[i]->drawBoundingBox();
 	}
-	hero.draw();
+//	if(heroLife > 0){
+		hero.draw();
+//	}
 	for(unsigned int i=0;i<bullets.size();i++) {
 		bullets[i].draw();
 	}
@@ -113,9 +128,26 @@ void Game::display(void)
 	if (activateBoss) {
 		
 		boss.draw();
-		
+		//collision detection between hero's bullets and boss
+		ib = bullets.begin();
+		while(ib != bullets.end()){
+			if(ib->isHit(boss)){
+				ib = bullets.erase(ib);
+				if (bossCount > 0) {
+					bossCount --;
+					if(bossCount%2!=0){
+						bossLife--;
+					}
+					
+				}
+			} else {
+				ib++;
+			}
+			boss.assignMesh(bossLife);
+		}
+		//collision detection between hero and boss
 		if (boss.isHit(hero)) {
-			
+			heroLife--;
 			if (bossCount > 0) {
 				bossCount --;
 				if(bossCount%2!=0){
@@ -129,12 +161,23 @@ void Game::display(void)
 			for(unsigned int i = 0; i < bossBullets.size();i++){
 				bossBullets[i].draw();
 			}
+			//collision detection with boss' arms
 			for (int i = 0; i < boss.boss_hand_size*boss.boss_hand_num; i += 1)
 			{
+				//collision detection between hero and arms
 				if (boss.hands[i]->isHit(hero)) {
-					boss.hands[i]->drawBoundingBox(red);
-				} else {
-					boss.hands[i]->drawBoundingBox();
+					heroLife--;
+				//	boss.hands[i]->drawBoundingBox(red);
+				}
+				//collision detection between hero's bullets and arms
+				ib = bullets.begin();
+				while(ib != bullets.end()){
+					if(ib->isHit(*boss.hands[i])){
+						ib = bullets.erase(ib);
+					//	boss.hands[i]->drawBoundingBox(red);
+					} else {
+						ib++;
+					}
 				}
 			}
 		}
