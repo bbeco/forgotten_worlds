@@ -326,26 +326,32 @@ void reshape(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 int count = 0;
+int countBullet = 0;
 int sign = 1;
 bool text = true;
+//bool shoot = false;
 void animate()
 {	
 	count++;
+	countBullet++;
 	count = count%2;
+	countBullet = countBullet%3;
 	if(count == 1){
+		cout<<"add hero's bullets"<<endl;
 		game.bullets.push_back(game.hero.shoot());
 	}
 	vector<Bullet>::iterator it;
 	//erase hero's bullets out of screen
-	for (it = game.bullets.begin(); (it->p[0] > 3.5) || (it->p[0] < -3.5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
+	cout<<"erase hero's bullets"<<endl;
+	for (it = game.bullets.begin(); (it->p[0] > 5) || (it->p[0] < -5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
 	game.bullets.erase(game.bullets.begin(), it);
 	
-	
+	cout<<"update enemies"<<endl;
 	//updating enemy position and orientation
 	for (unsigned int i = 0; i < game.enemies.size(); i++) {
 		game.enemies[i]->update(game.hero.p);
 	}
-	
+	cout<<"update hero's bullets"<<endl;
 	//update hero's bullets (position and texture)
 	for (it = game.bullets.begin(); it != game.bullets.end(); it++) {
 		it->mytext = text;
@@ -356,6 +362,7 @@ void animate()
 		/*
 		 * Creating an enemy
 		 */
+		 cout<<"add enemies"<<endl;
 		if (game.numberOfEnemies < MAX_ENEMY_NUMBER) {
 			//srand();
 			//a random value in the range 1 to 100
@@ -363,32 +370,41 @@ void animate()
 			//randomValue = 100;
 			if (randomValue <= enemyAppearenceFrequency) {
 				float rnd = (((float)rand())/RAND_MAX);
-				Vec3Df tmp_enemy_pos = Vec3Df(4, rnd*(maxValidPosition[1] - minValidPosition[1]), -3);
+				Vec3Df tmp_enemy_pos = Vec3Df(4, (rnd/10)*(maxValidPosition[1] - minValidPosition[1]), -3);
 				if (randomValue%2 == 0) {
 					tmp_enemy_pos[0] = -3;
 				}
 				game.enemies.push_back(new Enemy(tmp_enemy_pos, game.hero.p));
 				game.numberOfEnemies++;
 			}
-		//add enemies's bullets 
+		//add enemies' bullets 
+		cout<<"add  enemies' bullets"<<endl;
 			if(game.enemies.size() != 0){
-				for(unsigned int i = 0; i < game.enemies.size();i++){
-					game.enemyBullets.push_back(game.enemies[i]->shoot());
+				if(countBullet == 2){
+				//	shoot = true;
+					for(unsigned int i = 0; i < game.enemies.size();i++){
+						game.enemyBullets.push_back(game.enemies[i]->shoot());
+					}	
 				}
-				//erase enemies' bullets out of screen
-				for (it = game.enemyBullets.begin(); (it->p[0] > 8) || (it->p[0] < -8) || (it->p[1] > 8) || (it->p[1] < -8); it++);
-				game.enemyBullets.erase(game.enemyBullets.begin(), it);
+				if(!game.enemyBullets.empty()){
+					//erase enemies' bullets out of screen
+					cout<<"erase enemies' bullets"<<endl;
+					for (it = game.enemyBullets.begin(); (it->p[0] > 10) || (it->p[0] < -10) || (it->p[1] > 11) || (it->p[1] < -11); it++);
+					game.enemyBullets.erase(game.enemyBullets.begin(), it);
 		
-				//update enemies' bullets (just position)
-				for (it = game.enemyBullets.begin(); it != game.enemyBullets.end(); it++) {
-						it->update();
+					//update enemies' bullets (just position)
+					cout<<"update enemies's bullets"<<endl;
+					for (it = game.enemyBullets.begin(); it != game.enemyBullets.end(); it++) {
+							it->update();
+					}
 				}
 			} 
 		}
-		x_move += 0.04;
+		x_move += 0.1;
 		cout<<x_move<<endl;
 		if (x_move >= 50) {
-			game.activateBoss = true;
+			
+			
 			game.enemyBullets.clear();
 			game.enemies.clear();
 		}
@@ -396,6 +412,8 @@ void animate()
 		if (game.boss.p[0] >= 2) {
 			game.boss.p[0] -= 0.3;
 		} else {
+			cout<<"boss appears"<<endl;
+			game.activateBoss = true;
 			if(game.boss.p[1]+0.5 > 1.5){
 				sign = -1;
 			}
@@ -412,10 +430,11 @@ void animate()
 				game.bossBullets.clear();
 			} else {
 				game.boss.update_boss_hand_pos(false);
+				cout<<"add boss arms' bullets"<<endl;
 				game.bossBullets.push_back(game.boss.hands[13]->shoot());
 				game.bossBullets.push_back(game.boss.hands[14]->shoot());
 				game.bossBullets.push_back(game.boss.hands[29]->shoot());
-				for (it = game.bossBullets.begin(); (it->p[0] > 3.5) || (it->p[0] < -3.5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
+				for (it = game.bossBullets.begin(); (it->p[0] > 5) || (it->p[0] < -5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
 				game.bossBullets.erase(game.bossBullets.begin(), it);
 				for (it = game.bossBullets.begin(); it != game.bossBullets.end(); it++) {
 					it->update();

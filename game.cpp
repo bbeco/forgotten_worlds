@@ -29,13 +29,13 @@ Game::Game()
 	blue = Vec3Df(0, 0, 1);
 //	enemies.push_back(Enemy(Vec3Df(2, 0, -3)));
 //	enemies.push_back(Enemy(Vec3Df(-2, 0, -3)));
-	hero = Hero(Vec3Df(-1, 1, -3));
+	hero = Hero(Vec3Df(-0.5, 1, -3));
 	activateBoss = false;
 	drawArm = false;
 	boss = Boss(Vec3Df(3.5, 0, -3));
-	bossLife = 10;
+	bossLife = 12;
 	numberOfEnemies = 0;
-	bossCount = 20;
+	bossCount = 24;
 	heroLife = 400;
 };
 
@@ -60,6 +60,7 @@ void Game::display(void)
 	vector<Bullet>::iterator ib = bullets.begin();
 	vector<Enemy*>::iterator ie;
 	bool hit = false;
+	cout<<"CD:hero's bullets and enemies"<<endl;
 	while (ib != bullets.end() && !enemies.empty()) {
 		ie = enemies.begin();
 		while ( ie != enemies.end()) {
@@ -82,6 +83,7 @@ void Game::display(void)
 		}
 	}
 	//hero and enemies' bullets
+	cout<<"CD:hero and enemies' bullet"<<endl;
 	ib = enemyBullets.begin();
 	while(ib != enemyBullets.end()){
 		if(ib->isHit(hero)){
@@ -92,6 +94,7 @@ void Game::display(void)
 		}
 	}
 	//hero and enemies
+	cout<<"CD:hero and enemies"<<endl;
 	ie = enemies.begin();
 	while (ie != enemies.end()) {
 		if (hero.isHit(**ie)) {
@@ -105,8 +108,11 @@ void Game::display(void)
 			//hero.drawBoundingBox();
 		}
 	}
+	cout<<"empty enemies' bulltes vector"<<endl;
 	if(enemies.size() == 0){
+		
 		enemyBullets.clear();
+		
 	}
 	
 	/*
@@ -119,33 +125,20 @@ void Game::display(void)
 //	if(heroLife > 0){
 		hero.draw();
 //	}
+	
 	for(unsigned int i=0;i<bullets.size();i++) {
 		bullets[i].draw();
 	}
+	
 	for(unsigned int i=0;i<enemyBullets.size();i++) {
 		enemyBullets[i].draw();
 	}
+	cout<<"end of display, before boss"<<endl;
 	if (activateBoss) {
 		
 		boss.draw();
-		//collision detection between hero's bullets and boss
-		ib = bullets.begin();
-		while(ib != bullets.end()){
-			if(ib->isHit(boss)){
-				ib = bullets.erase(ib);
-				if (bossCount > 0) {
-					bossCount --;
-					if(bossCount%2!=0){
-						bossLife--;
-					}
-					
-				}
-			} else {
-				ib++;
-			}
-			boss.assignMesh(bossLife);
-		}
 		//collision detection between hero and boss
+		cout<<"CD:hero and boss"<<endl;
 		if (boss.isHit(hero)) {
 			heroLife--;
 			if (bossCount > 0) {
@@ -156,12 +149,35 @@ void Game::display(void)
 			}
 			boss.assignMesh(bossLife);
 		}
+		//collision detection between hero's bullets and boss
+		
+		vector<Bullet>::iterator ib = bullets.begin();
+		
+		while(ib != bullets.end()){
+			cout<<"CD:hero's bullets and boss"<<endl;
+			if(ib->isHit(boss)){
+				cout<<"hit hero's bullets and boss"<<endl;
+				ib = bullets.erase(ib);
+				if (bossCount > 0) {
+					bossCount --;
+					if(bossCount%2!=0){
+						bossLife--;
+					}
+				}
+				boss.assignMesh(bossLife);
+			} else {
+				ib++;
+			}
+			
+		}
+		
 		if (drawArm) {
 			boss.draw_boss_hands();
 			for(unsigned int i = 0; i < bossBullets.size();i++){
 				bossBullets[i].draw();
 			}
 			//collision detection with boss' arms
+			cout<<"CD:boss' arm"<<endl;
 			for (int i = 0; i < boss.boss_hand_size*boss.boss_hand_num; i += 1)
 			{
 				//collision detection between hero and arms
