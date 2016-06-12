@@ -277,7 +277,6 @@ void setOrigin()
 		exit(1);
 	}
 	origin = Vec3Df((float)objX, (float)objY, (float)objZ);
-	cout << "origin = " << origin << endl;
 }
 
 void display() {
@@ -337,21 +336,17 @@ void animate()
 	count = count%2;
 	countBullet = countBullet%3;
 	if(count == 1){
-		cout<<"add hero's bullets"<<endl;
 		game.bullets.push_back(game.hero.shoot());
 	}
 	vector<Bullet>::iterator it;
 	//erase hero's bullets out of screen
-	cout<<"erase hero's bullets"<<endl;
 	for (it = game.bullets.begin(); (it->p[0] > 5) || (it->p[0] < -5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
 	game.bullets.erase(game.bullets.begin(), it);
 	
-	cout<<"update enemies"<<endl;
 	//updating enemy position and orientation
 	for (unsigned int i = 0; i < game.enemies.size(); i++) {
 		game.enemies[i]->update(game.hero.p);
 	}
-	cout<<"update hero's bullets"<<endl;
 	//update hero's bullets (position and texture)
 	for (it = game.bullets.begin(); it != game.bullets.end(); it++) {
 		it->mytext = text;
@@ -362,7 +357,7 @@ void animate()
 		/*
 		 * Creating an enemy
 		 */
-		 cout<<"add enemies"<<endl;
+
 		if (game.numberOfEnemies < MAX_ENEMY_NUMBER) {
 			//srand();
 			//a random value in the range 1 to 100
@@ -378,7 +373,6 @@ void animate()
 				game.numberOfEnemies++;
 			}
 		//add enemies' bullets 
-		cout<<"add  enemies' bullets"<<endl;
 			if(game.enemies.size() != 0){
 				if(countBullet == 2){
 				//	shoot = true;
@@ -388,12 +382,11 @@ void animate()
 				}
 				if(!game.enemyBullets.empty()){
 					//erase enemies' bullets out of screen
-					cout<<"erase enemies' bullets"<<endl;
 					for (it = game.enemyBullets.begin(); (it->p[0] > 10) || (it->p[0] < -10) || (it->p[1] > 11) || (it->p[1] < -11); it++);
 					game.enemyBullets.erase(game.enemyBullets.begin(), it);
 		
 					//update enemies' bullets (just position)
-					cout<<"update enemies's bullets"<<endl;
+
 					for (it = game.enemyBullets.begin(); it != game.enemyBullets.end(); it++) {
 							it->update();
 					}
@@ -401,7 +394,6 @@ void animate()
 			} 
 		}
 		x_move += 0.1;
-		cout<<x_move<<endl;
 		if (x_move >= 50) {
 			
 			
@@ -412,7 +404,6 @@ void animate()
 		if (game.boss.p[0] >= 2) {
 			game.boss.p[0] -= 0.3;
 		} else {
-			cout<<"boss appears"<<endl;
 			game.activateBoss = true;
 			if(game.boss.p[1]+0.5 > 1.5){
 				sign = -1;
@@ -430,7 +421,7 @@ void animate()
 				game.bossBullets.clear();
 			} else {
 				game.boss.update_boss_hand_pos(false);
-				cout<<"add boss arms' bullets"<<endl;
+			
 				game.bossBullets.push_back(game.boss.hands[13]->shoot());
 				game.bossBullets.push_back(game.boss.hands[14]->shoot());
 				game.bossBullets.push_back(game.boss.hands[29]->shoot());
