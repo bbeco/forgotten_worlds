@@ -15,7 +15,7 @@ unsigned int w_win = 640, h_win = 480;
 float enemyAppearenceFrequency = 3;
 Game game;
 Vec3Df origin;
-float LightPos[4] = {0, 0, 0, 1};
+float LightPos[4] = {1, 0, 3, 1};
 bool drawBoundingBox = true;
 int NbVertX=60, NbVertY=40;
 float x_move = 12;
@@ -63,81 +63,105 @@ void initSurfaceMesh()
 	SurfaceColors3f.resize(3*2*2*NbVertX*NbVertY);
 	
 	//vectors defining the plane
-	float u[3], v[3], n[3];
-	float l;
+	float u[3], v[3], n[3], uu[3], vv[3], nn[3];
+	//float l;
 
 	for (int i = 0; i < NbVertX; i++) {
 		for (int j = 0; j < NbVertY; j++) {
 			
-			//define coords
+			//define coords v0
 			SurfaceVertices3f[0+3*4*(i*NbVertY+j)]=i;
 			SurfaceVertices3f[1+3*4*(i*NbVertY+j)]=j;
 			SurfaceVertices3f[2+3*4*(i*NbVertY+j)]=cos(i*M_PI/4)*sin(j*M_PI/4);
-
+			//v1
 			SurfaceVertices3f[3+3*4*(i*NbVertY+j)]=i+1;
 			SurfaceVertices3f[4+3*4*(i*NbVertY+j)]=j;
 			SurfaceVertices3f[5+3*4*(i*NbVertY+j)]=cos((i+1)*M_PI/4)*sin(j*M_PI/4);
-
+			//v2
 			SurfaceVertices3f[6+3*4*(i*NbVertY+j)]=i+1;
 			SurfaceVertices3f[7+3*4*(i*NbVertY+j)]=j+1;
 			SurfaceVertices3f[8+3*4*(i*NbVertY+j)]=cos((i+1)*M_PI/4)*sin((j+1)*M_PI/4);
-
+			//v3
 			SurfaceVertices3f[9+3*4*(i*NbVertY+j)]=i;
 			SurfaceVertices3f[10+3*4*(i*NbVertY+j)]=j+1;
 			SurfaceVertices3f[11+3*4*(i*NbVertY+j)]=cos(i*M_PI/4)*sin((j+1)*M_PI/4);
 			
-			u[0] = 1;
-			u[1] = 0;
-			u[2] = cos((i+1)*M_PI/4)*sin(j*M_PI/4) - cos(i*M_PI/4)*sin(j*M_PI/4);
+			u[0] = 0;
+			u[1] = 1;
+			u[2] = cos((i+1)*M_PI/4)*sin((j+1)*M_PI/4) - cos((i+1)*M_PI/4)*sin(j*M_PI/4);
 			
-			v[0] = 0;
-			v[1] = 1;
-			v[2] = cos(i*M_PI/4)*sin((j+1)*M_PI/4) - cos(i*M_PI/4)*sin(j*M_PI/4);
+			v[0] = -1;
+			v[1] = 0;
+			v[2] = cos(i*M_PI/4)*sin(j*M_PI/4) - cos((i+1)*M_PI/4)*sin(j*M_PI/4);
 		
-			n[0] = -u[2];
-			n[1] = -v[2];
+			n[0] = v[2];
+			n[1] = -u[2];
 			n[2] = 1;
+
+//			l = sqrt(1 + u[2]*u[2] + v[2]*v[2]);
+//			
+//			n[0] /= l;
+//			n[1] /= l;
+//			n[2] /= l;
+			Vec3Df normal1 = Vec3Df(n[0], n[1], n[2]);
+			normal1.normalize();
 			
-			l = sqrt(1 + u[2]*u[2] + v[2]*v[2]);
+			//define normals vertex 1
+			SurfaceNormals3f[3+3*4*(i*NbVertY+j)]=normal1[0];
+			SurfaceNormals3f[4+3*4*(i*NbVertY+j)]=normal1[1];
+			SurfaceNormals3f[5+3*4*(i*NbVertY+j)]=normal1[2];
+
+			uu[0] = 0;
+			uu[1] = -1;
+			uu[2] = cos(i*M_PI/4)*sin(j*M_PI/4) - cos(i*M_PI/4)*sin((j+1)*M_PI/4);
 			
-			n[0] /= l;
-			n[1] /= l;
-			n[2] /= l;
+			vv[0] = 1;
+			vv[1] = 0;
+			vv[2] = cos((i+1)*M_PI/4)*sin((j+1)*M_PI/4) - cos(i*M_PI/4)*sin((j+1)*M_PI/4);
+			nn[0] = -vv[2];
+			nn[1] = uu[2];
+			nn[2] = 1;
+			
+			Vec3Df normal2 = Vec3Df(nn[0], nn[1], nn[2]);
+			normal2.normalize();
+			
+			Vec3Df normal = normal1 + normal2;
+			normal.normalize();
+			
+			//v3
+			SurfaceNormals3f[9+3*4*(i*NbVertY+j)]=normal2[0];
+			SurfaceNormals3f[10+3*4*(i*NbVertY+j)]=normal2[1];
+			SurfaceNormals3f[11+3*4*(i*NbVertY+j)]=normal2[2];
 
-			//define normals
-			SurfaceNormals3f[0+3*4*(i*NbVertY+j)]=n[0];
-			SurfaceNormals3f[1+3*4*(i*NbVertY+j)]=n[1];
-			SurfaceNormals3f[2+3*4*(i*NbVertY+j)]=n[2];
+			
+			//v0
+			SurfaceNormals3f[0+3*4*(i*NbVertY+j)]=normal[0];
+			SurfaceNormals3f[1+3*4*(i*NbVertY+j)]=normal[1];
+			SurfaceNormals3f[2+3*4*(i*NbVertY+j)]=normal[2];
 
-			SurfaceNormals3f[3+3*4*(i*NbVertY+j)]=n[0];
-			SurfaceNormals3f[4+3*4*(i*NbVertY+j)]=n[1];
-			SurfaceNormals3f[5+3*4*(i*NbVertY+j)]=n[2];
+			//v2
+			SurfaceNormals3f[6+3*4*(i*NbVertY+j)]=normal[0];
+			SurfaceNormals3f[7+3*4*(i*NbVertY+j)]=normal[1];
+			SurfaceNormals3f[8+3*4*(i*NbVertY+j)]=normal[2];
 
-			SurfaceNormals3f[6+3*4*(i*NbVertY+j)]=n[0];
-			SurfaceNormals3f[7+3*4*(i*NbVertY+j)]=n[1];
-			SurfaceNormals3f[8+3*4*(i*NbVertY+j)]=n[2];
-
-			SurfaceNormals3f[9+3*4*(i*NbVertY+j)]=n[0];
-			SurfaceNormals3f[10+3*4*(i*NbVertY+j)]=n[1];
-			SurfaceNormals3f[11+3*4*(i*NbVertY+j)]=n[2];
-
+			
 			//define colors
 			//if (cos(i*M_PI) > 0.8) {
-				SurfaceColors3f[0+3*4*(i*NbVertY+j)]=0.9;
-				SurfaceColors3f[1+3*4*(i*NbVertY+j)]=0.7;
-				SurfaceColors3f[2+3*4*(i*NbVertY+j)]=0.4;
-				
-				SurfaceColors3f[3+3*4*(i*NbVertY+j)]=0.9;
-				SurfaceColors3f[4+3*4*(i*NbVertY+j)]=0.7;
-				SurfaceColors3f[5+3*4*(i*NbVertY+j)]=0.4;
+			SurfaceColors3f[0+3*4*(i*NbVertY+j)]=0.9;
+			SurfaceColors3f[1+3*4*(i*NbVertY+j)]=0.7;
+			SurfaceColors3f[2+3*4*(i*NbVertY+j)]=0.4;
+			
+			SurfaceColors3f[3+3*4*(i*NbVertY+j)]=0.9;
+			SurfaceColors3f[4+3*4*(i*NbVertY+j)]=0.7;
+			SurfaceColors3f[5+3*4*(i*NbVertY+j)]=0.4;
 
-				SurfaceColors3f[6+3*4*(i*NbVertY+j)]=0.9;
-				SurfaceColors3f[7+3*4*(i*NbVertY+j)]=0.7;
-				SurfaceColors3f[8+3*4*(i*NbVertY+j)]=0.4;
-				
-				SurfaceColors3f[9+3*4*(i*NbVertY+j)]=0.9;
-				SurfaceColors3f[10+3*4*(i*NbVertY+j)]=0.7;
-				SurfaceColors3f[11+3*4*(i*NbVertY+j)]=0.4;
+			SurfaceColors3f[6+3*4*(i*NbVertY+j)]=0.9;
+			SurfaceColors3f[7+3*4*(i*NbVertY+j)]=0.7;
+			SurfaceColors3f[8+3*4*(i*NbVertY+j)]=0.4;
+			
+			SurfaceColors3f[9+3*4*(i*NbVertY+j)]=0.9;
+			SurfaceColors3f[10+3*4*(i*NbVertY+j)]=0.7;
+			SurfaceColors3f[11+3*4*(i*NbVertY+j)]=0.4;
 
 			//define texcoords
 			SurfaceTexCoords2f[0+2*4*(i*NbVertY+j)]=0;
@@ -287,6 +311,7 @@ void display() {
 	glPushMatrix();
 	glTranslatef(-x_move,-2.5,-0.5);
 	glRotatef(-45,1,0,0);
+//	drawPoint(Vec3Df(LightPos[0], LightPos[1], LightPos[2]));
 	drawSurface();
 	glBindTexture(GL_TEXTURE_2D,0);
 	glDisable(GL_TEXTURE_2D);
@@ -353,21 +378,21 @@ void animate()
 		/*
 		 * Creating an enemy
 		 */
-		if (game.numberOfEnemies < MAX_ENEMY_NUMBER) {
-			//srand();
-			//a random value in the range 1 to 100
-			int randomValue = (int)(rand() % 100 + 1);
-			//randomValue = 100;
-			if (randomValue <= enemyAppearenceFrequency) {
-				float rnd = (((float)rand())/RAND_MAX);
-				Vec3Df tmp_enemy_pos = Vec3Df(4, rnd*(maxValidPosition[1] - minValidPosition[1]), -3);
-				if (randomValue%2 == 0) {
-					tmp_enemy_pos[0] = -3;
-				}
-				game.enemies.push_back(new Enemy(tmp_enemy_pos, game.hero.p));
-				game.numberOfEnemies++;
-			}
-		}
+//		if (game.numberOfEnemies < MAX_ENEMY_NUMBER) {
+//			//srand();
+//			//a random value in the range 1 to 100
+//			int randomValue = (int)(rand() % 100 + 1);
+//			//randomValue = 100;
+//			if (randomValue <= enemyAppearenceFrequency) {
+//				float rnd = (((float)rand())/RAND_MAX);
+//				Vec3Df tmp_enemy_pos = Vec3Df(4, rnd*(maxValidPosition[1] - minValidPosition[1]), -3);
+//				if (randomValue%2 == 0) {
+//					tmp_enemy_pos[0] = -3;
+//				}
+//				game.enemies.push_back(new Enemy(tmp_enemy_pos, game.hero.p));
+//				game.numberOfEnemies++;
+//			}
+//		}
 		x_move += 0.04;
 		
 		if (x_move >= 50) {
