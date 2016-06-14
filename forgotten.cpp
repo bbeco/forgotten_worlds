@@ -379,9 +379,11 @@ void animate()
 	if(count == 1){
 		game.bullets.push_back(game.hero.shoot());
 	}
-	vector<Bullet>::iterator it;
+	vector<Bullet*>::iterator it;
 	//erase hero's bullets out of screen
-	for (it = game.bullets.begin(); (it->p[0] > 5) || (it->p[0] < -5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
+	for (it = game.bullets.begin(); ((*it)->p[0] > 5) || ((*it)->p[0] < -5) || ((*it)->p[1] > 3.5) || ((*it)->p[1] < -3.5); it++) {
+		delete(*it);
+	}
 	game.bullets.erase(game.bullets.begin(), it);
 	
 	//updating enemy position and orientation
@@ -390,15 +392,14 @@ void animate()
 	}
 	//update hero's bullets (position and texture)
 	for (it = game.bullets.begin(); it != game.bullets.end(); it++) {
-		it->mytext = text;
+		(*it)->mytext = text;
 		text = !text;
-		it->update();
+		(*it)->update();
 	}
 	if(x_move <= 50){
 		/*
 		 * Creating an enemy
 		 */
-
 		if (game.numberOfEnemies < MAX_ENEMY_NUMBER) {
 			//srand();
 			//a random value in the range 1 to 100
@@ -423,18 +424,20 @@ void animate()
 				}
 				if(!game.enemyBullets.empty()){
 					//erase enemies' bullets out of screen
-					for (it = game.enemyBullets.begin(); (it->p[0] > 10) || (it->p[0] < -10) || (it->p[1] > 11) || (it->p[1] < -11); it++);
+					for (it = game.enemyBullets.begin(); ((*it)->p[0] > 10) || ((*it)->p[0] < -10) || ((*it)->p[1] > 11) || ((*it)->p[1] < -11); it++) {
+						delete(*it);
+					}
 					game.enemyBullets.erase(game.enemyBullets.begin(), it);
 		
 					//update enemies' bullets (just position)
 
 					for (it = game.enemyBullets.begin(); it != game.enemyBullets.end(); it++) {
-							it->update();
+							(*it)->update();
 					}
 				}
 			} 
 		}
-		x_move += 1.04;
+		x_move += 0.04;
 		if (x_move >= 50) {
 			
 			
@@ -469,11 +472,13 @@ void animate()
 				}
 				if(!game.bossBullets.empty()){
 					//erase boss'bullets out of screen
-					for (it = game.bossBullets.begin(); (it->p[0] > 5) || (it->p[0] < -5) || (it->p[1] > 3.5) || (it->p[1] < -3.5); it++);
+					for (it = game.bossBullets.begin(); ((*it)->p[0] > 5) || ((*it)->p[0] < -5) || ((*it)->p[1] > 3.5) || ((*it)->p[1] < -3.5); it++) {
+						delete(*it);
+					}
 					game.bossBullets.erase(game.bossBullets.begin(), it);
 					//update boss' bullets
 					for (it = game.bossBullets.begin(); it != game.bossBullets.end(); it++) {
-						it->update();
+						(*it)->update();
 					}
 				}
 			

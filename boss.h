@@ -22,7 +22,7 @@ public:
 	
 	void draw(Vec3Df color);
 	
-	Bullet shoot();
+	Bullet *shoot();
 	
 };
 

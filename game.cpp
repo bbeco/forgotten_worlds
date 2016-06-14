@@ -56,17 +56,19 @@ void Game::display(void)
 	 * Collision detection
 	 */
 	//hero's bullets and enemies
-	vector<Bullet>::iterator ib = bullets.begin();
+	vector<Bullet*>::iterator ib = bullets.begin();
 	vector<Enemy*>::iterator ie;
 	bool hit = false;
 	while (ib != bullets.end() && !enemies.empty()) {
 		ie = enemies.begin();
 		while ( ie != enemies.end()) {
-			if (ib->isHit(**ie)) {
+			if ((*ib)->isHit(**ie)) {
+				Bullet *tmp = *ib;
 				hit = true;
 				ib = bullets.erase(ib);
 				//enemies are dynamically allocated!
 				delete(*ie);
+				delete(tmp);
 				enemies.erase(ie);
 				numberOfEnemies--;
 				break;
@@ -83,9 +85,11 @@ void Game::display(void)
 	//hero and enemies' bullets
 	ib = enemyBullets.begin();
 	while(ib != enemyBullets.end()){
-		if(ib->isHit(hero)){
+		if((*ib)->isHit(hero)){
+			Bullet* tmp = *ib;
 			heroLife--;
 			ib = enemyBullets.erase(ib);
+			delete(tmp);
 		} else {
 			ib++;	
 		}
@@ -123,11 +127,11 @@ void Game::display(void)
 		}
 	}
 	for(unsigned int i=0;i<bullets.size();i++) {
-		bullets[i].draw();
+		bullets[i]->draw();
 	}
 	
 	for(unsigned int i=0;i<enemyBullets.size();i++) {
-		enemyBullets[i].draw();
+		enemyBullets[i]->draw();
 	}
 	if (activateBoss) {
 		boss.draw(camPos, Vec3Df(1, 1, 0));
@@ -143,10 +147,11 @@ void Game::display(void)
 		}
 		//collision detection between hero's bullets and boss
 		
-		vector<Bullet>::iterator ib = bullets.begin();
+		vector<Bullet*>::iterator ib = bullets.begin();
 		while(ib != bullets.end()){
 			
-			if(ib->isHit(boss)){
+			if((*ib)->isHit(boss)){
+				Bullet *tmp = *ib;
 				ib = bullets.erase(ib);
 				if (bossCount > 0) {
 					bossCount --;
@@ -154,6 +159,7 @@ void Game::display(void)
 						bossLife--;
 					}
 				}
+				delete(tmp);
 				boss.assignMesh(bossLife);
 			} else {
 				ib++;
@@ -162,16 +168,19 @@ void Game::display(void)
 		}
 		
 		if (drawArm) {
+			//collision detection between hero and boss' bullets
 			boss.draw_boss_hands();
 			for(unsigned int i = 0; i < bossBullets.size();i++){
-				bossBullets[i].draw();
+				bossBullets[i]->draw();
 			}
 			//collision detection with boss' arms
 			if(!bossBullets.empty()){
 				ib = bossBullets.begin();
 				while(ib != bossBullets.end()){
-					if(ib->isHit(hero)){
+					if((*ib)->isHit(hero)){
+						Bullet *tmp = *ib;
 						ib = bossBullets.erase(ib);
+						delete(tmp);
 						heroLife--;
 					} else {
 						ib++;
@@ -187,8 +196,10 @@ void Game::display(void)
 				//collision detection between hero's bullets and arms
 				ib = bullets.begin();
 				while(ib != bullets.end()){
-					if(ib->isHit(*boss.hands[i])){
+					if((*ib)->isHit(*boss.hands[i])){
+						Bullet *tmp = *ib;
 						ib = bullets.erase(ib);
+						delete(tmp);
 					} else {
 						ib++;
 					}

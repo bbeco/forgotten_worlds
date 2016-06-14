@@ -21,7 +21,7 @@ protected:
 public:
 	Enemy(Vec3Df pos, Vec3Df hp);
 	void update(Vec3Df hp);
-	Bullet shoot();
+	Bullet* shoot();
 };
 
 

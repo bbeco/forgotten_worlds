@@ -23,31 +23,31 @@ void Hand_Boss::draw(Vec3Df bossColor)
 	glPopMatrix();
 }
 
-Bullet Hand_Boss::shoot()
-	{
-		Bullet b(p,180,Vec3Df(0.53,0.8,0.9));
-		return b;
-	}
+Bullet *Hand_Boss::shoot()
+{
+	Bullet *b = new Bullet(p,180,Vec3Df(0.53,0.8,0.9));
+	return b;
+}
 	
 Boss::Boss(Vec3Df pos) : Concrete(pos)
-	{
-		mesh.loadMesh("Bane_3.obj");
-		computeBoundingBox();
-		boss_hand_size = 15;
-		boss_hand_num = 2;
-		PI = 3.14;
-		boss_hand_stacks = 50;
-		boss_hand_period = 10; 
-		boss_hand_count = 1; 
-		boss_hand_count_max = 2000; 
-		boss_hand_count_step = 10;
-		count_up = true;
-		boss_hand_radius = 0.1;
-		hands = new Hand_Boss*[boss_hand_num*boss_hand_size];
-		for(unsigned int i = 0;i < 12;i++){
-			simplifiedMesh[i] = mesh.simplifyMesh(i*2);
-		}
+{
+	mesh.loadMesh("Bane_3.obj");
+	computeBoundingBox();
+	boss_hand_size = 15;
+	boss_hand_num = 2;
+	PI = 3.14;
+	boss_hand_stacks = 50;
+	boss_hand_period = 10; 
+	boss_hand_count = 1; 
+	boss_hand_count_max = 2000; 
+	boss_hand_count_step = 10;
+	count_up = true;
+	boss_hand_radius = 0.1;
+	hands = new Hand_Boss*[boss_hand_num*boss_hand_size];
+	for(unsigned int i = 0;i < 12;i++){
+		simplifiedMesh[i] = mesh.simplifyMesh(i*2);
 	}
+}
 	
 void Boss::create_boss_hands() 
 	{

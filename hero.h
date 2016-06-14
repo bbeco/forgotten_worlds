@@ -9,7 +9,7 @@ class Hero: public Concrete
 {
 public:
 	Hero(Vec3Df pos  = Vec3Df(0, 0, 0));
-	Bullet shoot();
+	Bullet *shoot();
 };
 
 #endif
