@@ -31,11 +31,11 @@ public:
 	Hero hero;
 	bool activateBoss;
 	bool drawArm;
+	bool cheatMode;
 	int numberOfEnemies;
 	unsigned int bossLife;
 	Game();
 	void setScreenOrigin(Vec3Df o);
-	void init();
 	void display();
 };
 

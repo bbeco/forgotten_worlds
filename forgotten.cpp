@@ -16,7 +16,6 @@ float enemyAppearenceFrequency = 3;
 Game game;
 Vec3Df origin;
 Vec3Df LightPos;
-bool drawBoundingBox = true;
 int NbVertX=60, NbVertY=40;
 float x_move = 12;
 float minValidPosition[2] = {-1.3, -0.7}, maxValidPosition[2] = {3, 1.7};
@@ -253,6 +252,10 @@ void keyboard(unsigned char key, int x, int y)
     {
 	case 27:     // ESC
         	exit(0);
+        case 'c':
+        	game.cheatMode = !game.cheatMode;
+        	cout << "cheatMode = " << (game.cheatMode ? "TRUE" : "FALSE") << endl;
+        	break;
 	/* Movements */
 	case 'd':
 		if (game.hero.p[0] + 0.1 < maxValidPosition[0]) {
@@ -439,8 +442,6 @@ void animate()
 		}
 		x_move += 0.04;
 		if (x_move >= 50) {
-			
-			
 			game.enemyBullets.clear();
 			game.enemies.clear();
 		}

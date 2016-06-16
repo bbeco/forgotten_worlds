@@ -35,9 +35,8 @@ Game::Game()
 	numberOfEnemies = 0;
 	bossCount = 24;
 	heroLife = 249;
+	cheatMode = false;
 };
-
-void Game::init() {};
 
 void Game::setScreenOrigin(Vec3Df origin)
 {
@@ -87,7 +86,9 @@ void Game::display(void)
 	while(ib != enemyBullets.end()){
 		if((*ib)->isHit(hero)){
 			Bullet* tmp = *ib;
-			heroLife--;
+			if (!cheatMode) {
+				heroLife--;
+			}
 			ib = enemyBullets.erase(ib);
 			delete(tmp);
 		} else {
@@ -98,7 +99,9 @@ void Game::display(void)
 	ie = enemies.begin();
 	while (ie != enemies.end()) {
 		if (hero.isHit(**ie)) {
-			heroLife--;
+			if (!cheatMode) {
+				heroLife--;
+			}
 			delete(*ie);
 			ie = enemies.erase(ie);
 			numberOfEnemies--;
@@ -118,25 +121,26 @@ void Game::display(void)
 	for (unsigned int i = 0; i < enemies.size(); i++) {
 		enemies[i]->draw(Vec3Df(0.75, 0.75, 0.75));
 	}
-	cout<<"hero life:"<<heroLife<<endl;
-	if(heroLife > 0){
-		if(heroLife%5 == 0){
+	if(heroLife > 0) {
+		if(heroLife%5 == 0) {
 			hero.draw(Vec3Df(1, 0, 0));
 		} else {
 			hero.draw(Vec3Df(0.5, 0.97, 1));
 		}
+		
+		for(unsigned int i=0;i<bullets.size();i++) {
+			bullets[i]->draw();
+		}
 	}
-	for(unsigned int i=0;i<bullets.size();i++) {
-		bullets[i]->draw();
-	}
-	
 	for(unsigned int i=0;i<enemyBullets.size();i++) {
 		enemyBullets[i]->draw();
 	}
 	if (activateBoss) {
 		boss.draw(camPos, Vec3Df(1, 1, 0));
 		if (boss.isHit(hero)) {
-			heroLife--;
+			if (!cheatMode) {
+				heroLife--;
+			}
 			if (bossCount > 0) {
 				bossCount --;
 				if(bossCount%2!=0){
@@ -146,7 +150,6 @@ void Game::display(void)
 			boss.assignMesh(bossLife);
 		}
 		//collision detection between hero's bullets and boss
-		
 		vector<Bullet*>::iterator ib = bullets.begin();
 		while(ib != bullets.end()){
 			
@@ -181,7 +184,9 @@ void Game::display(void)
 						Bullet *tmp = *ib;
 						ib = bossBullets.erase(ib);
 						delete(tmp);
-						heroLife--;
+						if (!cheatMode) {
+							heroLife--;
+						}
 					} else {
 						ib++;
 					}
@@ -190,8 +195,8 @@ void Game::display(void)
 			for (int i = 0; i < boss.boss_hand_size*boss.boss_hand_num; i += 1)
 			{
 				//collision detection between hero and arms
-				if (boss.hands[i]->isHit(hero)) {
-					heroLife--;
+				if (boss.hands[i]->isHit(hero) && !cheatMode) {
+						heroLife--;
 				}
 				//collision detection between hero's bullets and arms
 				ib = bullets.begin();
