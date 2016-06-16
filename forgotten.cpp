@@ -438,16 +438,18 @@ void animate()
 				}
 			} 
 		}
-		x_move += 0.017;
+		x_move += 0.02;
 		if (x_move >= 50) {
 			game.enemyBullets.clear();
 			game.enemies.clear();
 		}
-	} else {
+	} else { //if (x_move <= 50)
 		if (game.boss.p[0] >= 2) {
+			if (!game.activateBoss) {
+				game.activateBoss = true;
+			}
 			game.boss.p[0] -= 0.1;
 		} else {
-			game.activateBoss = true;
 			if(game.boss.p[1]+0.5 > 1.5){
 				sign = -1;
 			}
