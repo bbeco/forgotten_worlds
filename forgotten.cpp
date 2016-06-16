@@ -440,7 +440,7 @@ void animate()
 				}
 			} 
 		}
-		x_move += 0.017;
+		x_move += 0.02;
 		if (x_move >= 50) {
 			game.enemyBullets.clear();
 			game.enemies.clear();
