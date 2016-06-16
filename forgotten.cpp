@@ -253,6 +253,10 @@ void keyboard(unsigned char key, int x, int y)
     {
 	case 27:     // ESC
         	exit(0);
+        case 'c':
+        	game.cheatMode = !game.cheatMode;
+        	cout << "cheat mode = " << (game.cheatMode ? "ON" : "OFF") << endl;
+        	break;
 	/* Movements */
 	case 'd':
 		if (game.hero.p[0] + 0.1 < maxValidPosition[0]) {
@@ -434,10 +438,8 @@ void animate()
 				}
 			} 
 		}
-		x_move += 1.04;
+		x_move += 0.017;
 		if (x_move >= 50) {
-			
-			
 			game.enemyBullets.clear();
 			game.enemies.clear();
 		}

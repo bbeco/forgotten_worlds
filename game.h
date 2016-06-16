@@ -13,7 +13,6 @@ class Game
 {
 private:
 	Vec3Df screenOrigin;
-	
 	float LightPos[4];
 	Vec3Df red;
 	Vec3Df green;
@@ -31,11 +30,11 @@ public:
 	Hero hero;
 	bool activateBoss;
 	bool drawArm;
+	bool cheatMode;
 	int numberOfEnemies;
 	unsigned int bossLife;
 	Game();
 	void setScreenOrigin(Vec3Df o);
-	void init();
 	void display();
 };
 
