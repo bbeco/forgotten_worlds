@@ -8,11 +8,11 @@
 #include "trackball.h"
 #include "game.h"
 #include "loadppm.h"
-#define MAX_ENEMY_NUMBER 10
+#define MAX_ENEMY_NUMBER 4
 using namespace std;
 
 unsigned int w_win = 640, h_win = 480;
-float enemyAppearenceFrequency = 3;
+float enemyAppearenceFrequency = 2;
 Game game;
 Vec3Df origin;
 Vec3Df LightPos;
@@ -440,7 +440,7 @@ void animate()
 				}
 			} 
 		}
-		x_move += 0.04;
+		x_move += 0.017;
 		if (x_move >= 50) {
 			game.enemyBullets.clear();
 			game.enemies.clear();

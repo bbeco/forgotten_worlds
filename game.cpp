@@ -58,7 +58,7 @@ void Game::display(void)
 	vector<Bullet*>::iterator ib = bullets.begin();
 	vector<Enemy*>::iterator ie;
 	bool hit = false;
-	while (ib != bullets.end() && !enemies.empty()) {
+	while (ib != bullets.end() && !enemies.empty() && heroLife > 0) {
 		ie = enemies.begin();
 		while ( ie != enemies.end()) {
 			if ((*ib)->isHit(**ie)) {
@@ -83,7 +83,7 @@ void Game::display(void)
 	}
 	//hero and enemies' bullets
 	ib = enemyBullets.begin();
-	while(ib != enemyBullets.end()){
+	while(ib != enemyBullets.end() && heroLife > 0){
 		if((*ib)->isHit(hero)){
 			Bullet* tmp = *ib;
 			if (!cheatMode) {
@@ -97,7 +97,7 @@ void Game::display(void)
 	}
 	//hero and enemies
 	ie = enemies.begin();
-	while (ie != enemies.end()) {
+	while (ie != enemies.end() && heroLife > 0) {
 		if (hero.isHit(**ie)) {
 			if (!cheatMode) {
 				heroLife--;
@@ -151,7 +151,7 @@ void Game::display(void)
 		}
 		//collision detection between hero's bullets and boss
 		vector<Bullet*>::iterator ib = bullets.begin();
-		while(ib != bullets.end()){
+		while(ib != bullets.end() && heroLife > 0){
 			
 			if((*ib)->isHit(boss)){
 				Bullet *tmp = *ib;
@@ -177,7 +177,7 @@ void Game::display(void)
 				bossBullets[i]->draw();
 			}
 			//collision detection with boss' arms
-			if(!bossBullets.empty()){
+			if(!bossBullets.empty() && heroLife > 0){
 				ib = bossBullets.begin();
 				while(ib != bossBullets.end()){
 					if((*ib)->isHit(hero)){
@@ -195,12 +195,12 @@ void Game::display(void)
 			for (int i = 0; i < boss.boss_hand_size*boss.boss_hand_num; i += 1)
 			{
 				//collision detection between hero and arms
-				if (boss.hands[i]->isHit(hero) && !cheatMode) {
+				if (heroLife > 0 && boss.hands[i]->isHit(hero) && !cheatMode) {
 						heroLife--;
 				}
 				//collision detection between hero's bullets and arms
 				ib = bullets.begin();
-				while(ib != bullets.end()){
+				while(ib != bullets.end() && heroLife > 0){
 					if((*ib)->isHit(*boss.hands[i])){
 						Bullet *tmp = *ib;
 						ib = bullets.erase(ib);
